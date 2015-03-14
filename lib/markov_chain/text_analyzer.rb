@@ -26,30 +26,22 @@ module MarkovChain
       @dictionary = starter_dictionary
     end
 
-    PHRASE_SIZE = 2
-    WORD_DELIMITERS = /[\.\-\s]/
-
-    def dictionary_for_text
-      build_hash
+    def incorporate_into_dictionary
+      previous_word = nil
+      interesting_split_text.each_with_index do |word, index|
+        # if we're not at the beginning or the end of the text -- e.g. we have a full triple
+        if previous_word && next_word = interesting_split_text[index + 1]
+          dictionary.push(previous_word, word, next_word)
+        end
+        previous_word = word
+      end
       dictionary
     end
 
     protected
 
-    # Go through the text, and assemble the hash
-    def build_hash
-      previous_word = nil
-      split_text.each_with_index do |word, index|
-        # if we're not at the beginning or the end of the text -- e.g. we have a full triple
-        if previous_word && next_word = split_text[index + 1]
-          dictionary.push(previous_word, word, next_word)
-        end
-        previous_word = word
-      end
-    end
-
-    def split_text
-      @split_text ||= text.downcase.split(WORD_DELIMITERS)
+    def interesting_split_text
+      @interesting_split_text ||= TextSplitter.new(text).components
     end
   end
 end

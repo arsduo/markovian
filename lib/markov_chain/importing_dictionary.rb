@@ -14,6 +14,10 @@ module MarkovChain
       dictionary[key(word1, word2)] += [word3]
     end
 
+    def [](phrase)
+      dictionary[phrase]
+    end
+
     protected
     attr_reader :dictionary
 
