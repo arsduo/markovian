@@ -18,7 +18,12 @@ module MarkovChain
     end
 
     def default_seed
-      split_seed_text.length >= 2 ? split_seed_text[-2..-1] : split_seed_text
+      if split_seed_text.length >= 2
+        split_seed_text[-2..-1]
+      else
+        # if we only have a one-word seed text, the previous word is nil
+        [nil, split_seed_text.first]
+      end
     end
 
     protected

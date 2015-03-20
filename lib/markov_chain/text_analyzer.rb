@@ -16,26 +16,26 @@
 # * Capitalization is deferred for later.
 module MarkovChain
   class TextAnalyzer
-    # Pass in a text, and optionally a Markov dictionary to add data to. (If, for instance, you're
+    # Pass in a text, and optionally a Markov chain to add data to. (If, for instance, you're
     # importing a text broken out into smaller lines -- dialog, for instance, or Twitter archives)
     # -- you may want to incorporate words across sentence or word boundaries, but not across
     # units.)
-    attr_reader :text, :dictionary
-    def initialize(text, starter_dictionary = ImportingDictionary.new)
+    attr_reader :text, :chain
+    def initialize(text, starter_chain = Chain.new)
       @text = text
-      @dictionary = starter_dictionary
+      @chain = starter_chain
     end
 
-    def incorporate_into_dictionary
+    def incorporate_into_chain
       previous_word = nil
       interesting_split_text.each_with_index do |word, index|
         # if we're not at the beginning or the end of the text -- e.g. we have a full triple
         if next_word = interesting_split_text[index + 1]
-          dictionary.push(word, next_word: next_word, previous_word: previous_word)
+          chain.lengthen(word, next_word: next_word, previous_word: previous_word)
         end
         previous_word = word
       end
-      dictionary
+      chain
     end
 
     protected
