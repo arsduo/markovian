@@ -45,8 +45,11 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1)
+    diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.4.0)
+    faker (1.4.3)
+      i18n (~> 0.5)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
     hike (1.2.3)
@@ -99,6 +102,23 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    rspec-core (3.2.2)
+      rspec-support (~> 3.2.0)
+    rspec-expectations (3.2.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.2.0)
+    rspec-mocks (3.2.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.2.0)
+    rspec-rails (3.2.1)
+      actionpack (>= 3.0, < 4.3)
+      activesupport (>= 3.0, < 4.3)
+      railties (>= 3.0, < 4.3)
+      rspec-core (~> 3.2.0)
+      rspec-expectations (~> 3.2.0)
+      rspec-mocks (~> 3.2.0)
+      rspec-support (~> 3.2.0)
+    rspec-support (3.2.2)
     sass (3.2.19)
     sass-rails (4.0.5)
       railties (>= 4.0.0, < 5.0)
@@ -134,9 +154,11 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0)
+  faker
   jbuilder (~> 1.2)
   jquery-rails
   rails (~> 4.2.0)
+  rspec-rails
   sass-rails (~> 4.0)
   sdoc
   sqlite3
