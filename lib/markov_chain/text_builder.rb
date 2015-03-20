@@ -18,7 +18,7 @@ module MarkovChain
     end
 
     def default_seed
-      split_seed_text[-2..-1]
+      split_seed_text.length >= 2 ? split_seed_text[-2..-1] : split_seed_text
     end
 
     protected
