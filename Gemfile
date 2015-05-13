@@ -35,6 +35,7 @@ end
 group :test do
   gem "rspec-rails"
   gem "faker"
+  gem "codeclimate-test-reporter"
 end
 
 # Use ActiveModel has_secure_password
