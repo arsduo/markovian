@@ -1,3 +1,8 @@
+[![Code Climate](https://codeclimate.com/github/arsduo/markov-ahkoppel/badges/gpa.svg)](https://codeclimate.com/github/arsduo/markov-ahkoppel)
+[![Test Coverage](https://codeclimate.com/github/arsduo/markov-ahkoppel/badges/coverage.svg)](https://codeclimate.com/github/arsduo/markov-ahkoppel/coverage)
+[![Build Status](https://travis-ci.org/arsduo/markov-ahkoppel.svg?branch=markov-v1)](https://travis-ci.org/arsduo/markov-ahkoppel)
+
+
 == README
 
 This README would normally document whatever steps are necessary to get the
