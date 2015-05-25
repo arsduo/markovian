@@ -20,25 +20,40 @@ module MarkovChain
     # importing a text broken out into smaller lines -- dialog, for instance, or Twitter archives)
     # -- you may want to incorporate words across sentence or word boundaries, but not across
     # units.)
-    attr_reader :text, :chain
-    def initialize(text, starter_chain = Chain.new)
+    attr_reader :text, :chainset
+    def initialize(text, starter_chainset = ChainSet.new)
       @text = text
-      @chain = starter_chain
+      @chainset = starter_chainset
     end
 
     def incorporate_into_chain
+      add_text_to_chain(interesting_split_text, forward_chain)
+      # to assemble backward text, we just create a chainset with all the texts reversed
+      # that allows us to see what words precede any given word
+      add_text_to_chain(interesting_split_text.reverse, backward_chain)
+      chainset
+    end
+
+    protected
+
+    def forward_chain
+      chainset.forward
+    end
+
+    def backward_chain
+      chainset.backward
+    end
+
+    def add_text_to_chain(text_elements, chain)
       previous_word = nil
-      interesting_split_text.each_with_index do |word, index|
+      text_elements.each_with_index do |word, index|
         # if we're not at the beginning or the end of the text -- e.g. we have a full triple
-        if next_word = interesting_split_text[index + 1]
+        if next_word = text_elements[index + 1]
           chain.lengthen(word, next_word: next_word, previous_word: previous_word)
         end
         previous_word = word
       end
-      chain
     end
-
-    protected
 
     def interesting_split_text
       @interesting_split_text ||= TextSplitter.new(text).components
