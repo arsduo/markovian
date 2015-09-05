@@ -3,7 +3,7 @@ CodeClimate::TestReporter.start
 
 require 'rspec'
 require 'faker'
-require 'oj'
+require 'markovian'
 
 # We need compat mode for our tests to run
 Oj.default_options = {mode: :compat}

@@ -3,20 +3,22 @@
 # follow.
 #
 # The key is an opaque value, which could represent either a single word or a phrase as desired.
-module MarkovChain
-  class Dictionary
-    def push(key, word)
-      dictionary[key] += [word]
-    end
+module Markovian
+  class Chain
+    class Dictionary
+      def push(key, word)
+        dictionary[key] += [word]
+      end
 
-    def next_word(key)
-      dictionary[key].sample
-    end
+      def next_word(key)
+        dictionary[key].sample
+      end
 
-    protected
+      protected
 
-    def dictionary
-      @dictionary ||= Hash.new([])
+      def dictionary
+        @dictionary ||= Hash.new([])
+      end
     end
   end
 end

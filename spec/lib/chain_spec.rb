@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module MarkovChain
+module Markovian
   RSpec.describe Chain do
     let(:chain) { Chain.new }
     let(:word) { Faker::Lorem.word }

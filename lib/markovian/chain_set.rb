@@ -1,6 +1,9 @@
-module MarkovChain
-  # This class represents a pair of chains, one going forward and one going backward. With this, we
-  # can
+require 'markovian/chain'
+
+# This class represents a pair of chains, one going forward and one going backward. With this, we
+# can construct phrases in which the original seed word appears at any point in the text (going
+# backward to create the earlier text, forward to create the rest).
+module Markovian
   class ChainSet
     attr_reader :forward, :backward
     def initialize

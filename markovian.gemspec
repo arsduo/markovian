@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'markov/version'
+require 'markovian/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "markov"
-  spec.version       = Markov::VERSION
+  spec.name          = "markovian"
+  spec.version       = Markovian::VERSION
   spec.authors       = ["Alex Koppel"]
   spec.email         = ["alex@alexkoppel.com"]
 
@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency "oj"
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
 end

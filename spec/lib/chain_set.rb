@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module MarkovChain
+module Markovian
   RSpec.describe ChainSet do
     let(:chainset) { ChainSet.new }
     let(:forward) { chainset.forward }
