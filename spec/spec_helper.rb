@@ -8,6 +8,8 @@ require 'markovian'
 # We need compat mode for our tests to run
 Oj.default_options = {mode: :compat}
 
+SPEC_ROOT = File.dirname(__FILE__)
+
 # The `.rspec` file also contains a few flags that are not defaults but that
 # users commonly want.
 #
