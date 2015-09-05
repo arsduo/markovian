@@ -1,10 +1,12 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
+require 'rspec'
 require 'faker'
+require 'oj'
+
+# We need compat mode for our tests to run
+Oj.default_options = {mode: :compat}
 
 # The `.rspec` file also contains a few flags that are not defaults but that
 # users commonly want.
