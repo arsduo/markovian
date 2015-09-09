@@ -1,6 +1,6 @@
-[![Code Climate](https://codeclimate.com/github/arsduo/markov-ahkoppel/badges/gpa.svg)](https://codeclimate.com/github/arsduo/markov-ahkoppel)
-[![Test Coverage](https://codeclimate.com/github/arsduo/markov-ahkoppel/badges/coverage.svg)](https://codeclimate.com/github/arsduo/markov-ahkoppel/coverage)
-[![Build Status](https://travis-ci.org/arsduo/markov-ahkoppel.svg?branch=markov-v1)](https://travis-ci.org/arsduo/markov-ahkoppel)
+[![Code Climate](https://codeclimate.com/github/arsduo/markovian/badges/gpa.svg)](https://codeclimate.com/github/arsduo/markovian)
+[![Test Coverage](https://codeclimate.com/github/arsduo/markovian/badges/coverage.svg)](https://codeclimate.com/github/arsduo/markovian/coverage)
+[![Build Status](https://travis-ci.org/arsduo/markovian.svg)](https://travis-ci.org/arsduo/markovian)
 
 # A Markov Implementation
 
@@ -12,7 +12,31 @@ Clone from Github, and then execute:
 
 ## Usage
 
-TODO
+Fuller documentation will come shortly. For now, let's see how we can use Markovian to build some tweets from a Twitter archive we've downloaded:
+
+```ruby
+> path = #{path_to_twitter_archive}
+ => path_to_twitter_archive
+> importer = Markovian::Importers::Twitter::CsvImporter.new(path)
+ => #<Markovian::Importers::Twitter::CsvImporter:0x007fd0ca3282a8 @path=path_to_twitter_archive>
+> tweets = importer.texts_for_markov_analysis; puts tweets.count
+14394
+ => nil
+
+# Create a Chainset (the structure holding all the word relations)...
+> chainset = Markovian::ChainSet.new
+ => #<Markovian::ChainSet:0x007fd0ca03df70 ...>
+# And add all the tweets to the Markov dictionary
+> tweets.each {|t| Markovian::Chain::TextCompiler.new(t, chainset).incorporate_into_chain}; puts "done."
+done.
+ => nil
+
+# Now, we can build some text!
+> Markovian::TextBuilder.new("markov", chainset).construct
+=> "markov chains a lot better than a month, i've been here half an hour of night when you can get behind belgium for the offline train journey"
+```
+
+Exactly!
 
 ## Development
 
@@ -22,7 +46,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/arsduo/markov-ahkoppel. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/arsduo/markovian. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 ## License
 

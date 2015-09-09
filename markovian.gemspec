@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alex Koppel"]
   spec.email         = ["alex@alexkoppel.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{A simple, hopefully easy-to-use Markov chain generator.}
+  spec.description   = %q{A simple, hopefully easy-to-use Markov chain generator.}
   spec.homepage      = "https://github.com/arsduo/markov-ahkoppel"
   spec.license       = "MIT"
 
