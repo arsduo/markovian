@@ -36,13 +36,19 @@ module Markovian
             chain.lengthen(word, previous_word: previous_word, next_word: phrase_association)
           end
 
-          it "samples the results when given a single word" do
-            old_srand = srand
-            srand 12
-            expect(7.times.map { chain.next_word(word) }).to eq([
-              phrase_association, phrase_association, word_association, phrase_association, phrase_association, word_association, phrase_association
-            ])
-            srand old_srand
+          it "samples the results when given a single word", temporary_srand: 12 do
+            # jruby's srand returns something slightly different from MRI's, so we need to
+            # hard-code two results
+            if RUBY_PLATFORM == "java"
+              results = [
+                word_association, phrase_association, phrase_association, word_association, phrase_association, word_association, word_association
+              ]
+            else
+              results = [
+                word_association, phrase_association, phrase_association, word_association, word_association, word_association, phrase_association
+              ]
+            end
+            expect(7.times.map { chain.next_word(word) }).to eq(results)
           end
 
           it "returns only the next match when looking up by phrase" do
