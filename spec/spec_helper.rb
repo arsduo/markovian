@@ -82,4 +82,17 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  # In multiple tests, we want to temporarily control the randomness in order to test random
+  # behavior (like the composition of a Markov text). This helper makes it easy to fix srand for
+  # the duration of a test, while ensuring that the original srand (which is used by RSpec's
+  # ordering, see above) is preserved otherwise.
+  config.around :each do |example|
+    if temporary_srand = example.metadata[:temporary_srand]
+      original_srand = srand
+      srand temporary_srand
+      example.run
+      srand original_srand
+    end
+  end
 end
