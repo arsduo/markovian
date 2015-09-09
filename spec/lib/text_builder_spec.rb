@@ -23,7 +23,11 @@ module Markovian
           if current_index = stream_of_words.index(current_word)
             # since the stream is purely linear, we can also ensure that we're calling the words in
             # the right sequence
-            expect(previous_word).to eq(stream_of_words[current_index - 1])
+            if current_index == 0
+              expect(previous_word).to be_nil
+            else
+              expect(previous_word).to eq(stream_of_words[current_index - 1])
+            end
           end
           stream_of_words[current_index.to_i + 1]
         end
@@ -49,6 +53,16 @@ module Markovian
 
       it "includes the seed word if desired" do
         expect(builder.construct(start_result_with_seed_word: true)).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+      end
+
+      it "ignores leading spaces" do
+        stream_of_words[3] = " foo "
+        expect(builder.construct).to eq("voluptate foo rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
+      end
+
+      it "works fine if there's only one word in the seed text" do
+        builder = TextBuilder.new("going", chain_set)
+        expect(builder.construct).to eq("on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
     end
 
