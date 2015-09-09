@@ -4,7 +4,7 @@ require 'markovian/chain/text_compiler'
 module Markovian
   class Chain
     RSpec.describe TextCompiler do
-      let(:text) { "hello-there" }
+      let(:text) { "hello--there" }
       let(:text_compiler) { TextCompiler.new(text) }
       let(:chainset) { text_compiler.chainset }
 
