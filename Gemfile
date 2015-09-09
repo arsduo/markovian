@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'byebug'
+  gem 'byebug', platform: :mri
 end
 
 group :test do

@@ -1,4 +1,3 @@
-require 'oj'
 require 'markovian/chain_set'
 require 'markovian/text_builder'
 require 'markovian/chain/text_compiler'
