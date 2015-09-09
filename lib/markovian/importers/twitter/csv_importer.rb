@@ -22,7 +22,7 @@ module Markovian
         def csv_enumerator
           # returns an iterator object that we can roll through
           # this does not actually start reading the file
-          @csv_enumerator ||= CSV.open(path, headers: true).each.lazy
+          @csv_enumerator ||= CSV.open(path, headers: true).each
         end
 
         # an iterator over personal tweets (e.g. not RTs)
