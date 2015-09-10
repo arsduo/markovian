@@ -93,6 +93,8 @@ RSpec.configure do |config|
       srand temporary_srand
       example.run
       srand original_srand
+    else
+      example.run
     end
   end
 end

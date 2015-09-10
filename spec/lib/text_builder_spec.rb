@@ -6,7 +6,7 @@ module Markovian
     let(:chain_set) { double("ChainSet") }
     let(:builder) { TextBuilder.new(seed_text, chain_set) }
 
-    describe "#construct" do
+    describe "#construct", temporary_srand: 17 do
       let(:stream_of_words) {
         [
           "going", "on", "voluptate", "debitis", "rerum", "recusandae", "accusantium", "quo",
@@ -17,8 +17,7 @@ module Markovian
 
       before :each do
         # freeze randomness
-        srand 17
-        allow(chain_set).to receive(:next_word) do |current_word, previous_word:|
+        allow(chain_set).to receive(:next_word) do |current_word, previous_word: nil|
           # simple mechanism to the next word
           if current_index = stream_of_words.index(current_word)
             # since the stream is purely linear, we can also ensure that we're calling the words in

@@ -15,16 +15,16 @@ module Markovian
           expect(dictionary.next_word(phrase)).to eq(word)
         end
 
-        it "samples from the remaining words" do
+        it "samples from the remaining words", temporary_srand: 17 do
           # fix the order of sampling so we can reproduce the test
-          old_srand = srand
-          srand 17
           dictionary.push(phrase, word)
           dictionary.push(phrase, word2)
-          expect(7.times.map { dictionary.next_word(phrase) }).to eq([
-            word, word2, word, word2, word, word2, word
-          ])
-          srand old_srand
+          if RUBY_PLATFORM == "java"
+            result = [word2, word2, word2, word, word, word2, word]
+          else
+            result = [word, word2, word, word2, word, word2, word]
+          end
+          expect(7.times.map { dictionary.next_word(phrase) }).to eq(result)
         end
       end
     end
