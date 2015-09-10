@@ -17,8 +17,11 @@ module Markovian
 
       before :each do
         # freeze randomness
-        allow(chain_set).to receive(:next_word) do |current_word, previous_word: nil|
+        # jruby on travis has some weirdness around the keyword arg, so we treat is as a hash in
+        # the tests
+        allow(chain_set).to receive(:next_word) do |current_word, params = {}|
           # simple mechanism to the next word
+          previous_word = params[:previous_word]
           if current_index = stream_of_words.index(current_word)
             # since the stream is purely linear, we can also ensure that we're calling the words in
             # the right sequence
