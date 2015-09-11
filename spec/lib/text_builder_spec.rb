@@ -3,8 +3,8 @@ require 'spec_helper'
 module Markovian
   RSpec.describe TextBuilder do
     let(:seed_text) { "going on" }
-    let(:chain_set) { double("ChainSet") }
-    let(:builder) { TextBuilder.new(seed_text, chain_set) }
+    let(:chain_set) { double("Corpus::ChainSet") }
+    let(:builder) { TextBuilder.new(chain_set) }
 
     describe "#construct", temporary_srand: 17 do
       let(:stream_of_words) {
@@ -36,50 +36,37 @@ module Markovian
       end
 
       it "builds a text of the right length" do
-        expect(builder.construct).to eq("voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
+        expect(builder.construct(seed_text: seed_text)).to eq("voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
       end
 
       it "accepts a shorter length" do
-        expect(builder.construct(length: 20)).to eq("voluptate debitis")
-      end
-
-      it "will accept a different seed" do
-        allow(chain_set).to receive(:next_word) do |current_word, previous_word|
-          # we have to skip the check for previous word now, since we're messing with the start
-          # point (and our mock is simple)
-          stream_of_words[stream_of_words.index(current_word).to_i + 1]
-        end
-
-        expect(builder.construct(seed: "voluptate")).to eq("on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+        expect(builder.construct(seed_text: seed_text, length: 20)).to eq("voluptate debitis")
       end
 
       it "includes the seed word if desired" do
-        expect(builder.construct(start_result_with_seed_word: true)).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+        expect(builder.construct(seed_text: seed_text, start_result_with_seed_word: true)).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
 
       it "ignores leading spaces" do
         stream_of_words[3] = " foo "
-        expect(builder.construct).to eq("voluptate foo rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
+        expect(builder.construct(seed_text: seed_text)).to eq("voluptate foo rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
       end
 
       it "works fine if there's only one word in the seed text" do
-        builder = TextBuilder.new("going", chain_set)
-        expect(builder.construct).to eq("on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+        expect(builder.construct(seed_text: "going")).to eq("on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
     end
 
-    describe "#default_seed" do
+    describe "#identify_starter_text" do
       context "if the seed has multiple words" do
         it "returns the last two items" do
-          expect(builder.default_seed).to eq(["going", "on"])
+          expect(builder.identify_starter_text(seed_text)).to eq(["going", "on"])
         end
       end
 
       context "if the seed is only one word" do
-        let(:seed_text) { "result " }
-
         it "returns [nil, the_word]" do
-          expect(builder.default_seed).to eq([nil, "result"])
+          expect(builder.identify_starter_text("result ")).to eq([nil, "result"])
         end
       end
     end

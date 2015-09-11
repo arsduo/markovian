@@ -1,31 +1,32 @@
 require 'markovian/utils/text_splitter'
 
-# This class, given a seed word and a Markov chain_set, will attempt to construct a new text using
+# This class, given a Markov chainset, will attempt to construct a new text based on a given seed using
 # the Markov associations.
 module Markovian
   class TextBuilder
     attr_reader :seed_text, :chain_set
-    def initialize(seed_text, chain_set)
-      @seed_text = seed_text
+    def initialize(chain_set)
       @chain_set = chain_set
     end
 
-    def construct(length: 140, seed: default_seed, start_result_with_seed_word: false)
+    def construct(seed_text:, length: 140, start_result_with_seed_word: false)
       # TODO: if we don't hit a result for the first pair, move backward through the original text
       # until we get something
+      seed_pair = identify_starter_text(seed_text)
       result_with_next_word(
-        previous_pair: seed,
-        result: start_result_with_seed_word ? format_result_array(seed) : nil,
+        previous_pair: seed_pair,
+        result: start_result_with_seed_word ? format_result_array(seed_pair) : nil,
         length: length
       )
     end
 
-    def default_seed
-      if split_seed_text.length >= 2
-        split_seed_text[-2..-1]
+    def identify_starter_text(raw_text)
+      seed_components = split_seed_text(raw_text)
+      if seed_components.length >= 2
+        seed_components[-2..-1]
       else
         # if we only have a one-word seed text, the previous word is nil
-        [nil, split_seed_text.first]
+        [nil, seed_components.first]
       end
     end
 
@@ -56,8 +57,8 @@ module Markovian
       array_of_words.compact.map(&:strip).join(" ")
     end
 
-    def split_seed_text
-      @split_seed_text ||= Utils::TextSplitter.new(seed_text).components
+    def split_seed_text(seed_text)
+      Utils::TextSplitter.new(seed_text).components
     end
   end
 end
