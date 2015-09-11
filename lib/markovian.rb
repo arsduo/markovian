@@ -1,6 +1,6 @@
-require 'markovian/chain_set'
 require 'markovian/text_builder'
-require 'markovian/chain/text_compiler'
+require 'markovian/corpus/chain_set'
+require 'markovian/corpus/text_compiler'
 # importers
 require 'markovian/importers/twitter/csv_importer'
 

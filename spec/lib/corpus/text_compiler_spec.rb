@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'markovian/chain/text_compiler'
+require 'markovian/corpus/text_compiler'
 
 module Markovian
-  class Chain
+  module Corpus
     RSpec.describe TextCompiler do
       let(:text) { "hello--there" }
       let(:text_compiler) { TextCompiler.new(text) }

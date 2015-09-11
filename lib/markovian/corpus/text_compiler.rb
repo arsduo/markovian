@@ -17,7 +17,7 @@ require 'markovian/utils/text_splitter'
 # * Handling sentences or newlines is later -- I'm not sure the right way to do it.
 # * Capitalization is deferred for later.
 module Markovian
-  class Chain
+  module Corpus
     class TextCompiler
       # Pass in a text, and optionally an existing Markov chain to add data to. In many cases, you
       # may be building a chain using a set of smaller texts instead of one large texts (dialog,
