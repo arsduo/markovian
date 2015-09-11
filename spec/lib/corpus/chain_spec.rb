@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Markovian
-  module Corpus
+  class Corpus
     RSpec.describe Chain do
       let(:chain) { Chain.new }
       let(:word) { Faker::Lorem.word }

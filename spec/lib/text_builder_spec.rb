@@ -3,8 +3,8 @@ require 'spec_helper'
 module Markovian
   RSpec.describe TextBuilder do
     let(:seed_text) { "going on" }
-    let(:chain_set) { double("Corpus::ChainSet") }
-    let(:builder) { TextBuilder.new(chain_set) }
+    let(:corpus) { double("Corpus::Corpus") }
+    let(:builder) { TextBuilder.new(corpus) }
 
     describe "#construct", temporary_srand: 17 do
       let(:stream_of_words) {
@@ -19,7 +19,7 @@ module Markovian
         # freeze randomness
         # jruby on travis has some weirdness around the keyword arg, so we treat is as a hash in
         # the tests
-        allow(chain_set).to receive(:next_word) do |current_word, params = {}|
+        allow(corpus).to receive(:next_word) do |current_word, params = {}|
           # simple mechanism to the next word
           previous_word = params[:previous_word]
           if current_index = stream_of_words.index(current_word)

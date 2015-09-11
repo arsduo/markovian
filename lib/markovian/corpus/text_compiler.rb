@@ -17,34 +17,34 @@ require 'markovian/utils/text_splitter'
 # * Handling sentences or newlines is later -- I'm not sure the right way to do it.
 # * Capitalization is deferred for later.
 module Markovian
-  module Corpus
+  class Corpus
     class TextCompiler
       # Pass in a text, and optionally an existing Markov chain to add data to. In many cases, you
       # may be building a chain using a set of smaller texts instead of one large texts (dialog,
       # for instance, or Twitter archives), and so may call this class repeatedly for elements of
       # the parent corpus.
-      attr_reader :text, :chainset
-      def initialize(text, starter_chainset = ChainSet.new)
+      attr_reader :text, :corpus
+      def initialize(text, starter_corpus = Corpus.new)
         @text = text
-        @chainset = starter_chainset
+        @corpus = starter_corpus
       end
 
       def incorporate_into_chain
         add_text_to_chain(interesting_split_text, forward_chain)
-        # to assemble backward text, we just create a chainset with all the texts reversed
+        # to assemble backward text, we just create a corpus with all the texts reversed
         # that allows us to see what words precede any given word
         add_text_to_chain(interesting_split_text.reverse, backward_chain)
-        chainset
+        corpus
       end
 
       protected
 
       def forward_chain
-        chainset.forward
+        corpus.forward
       end
 
       def backward_chain
-        chainset.backward
+        corpus.backward
       end
 
       def add_text_to_chain(text_elements, chain)

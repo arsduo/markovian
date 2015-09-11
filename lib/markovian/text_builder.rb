@@ -1,12 +1,12 @@
 require 'markovian/utils/text_splitter'
 
-# This class, given a Markov chainset, will attempt to construct a new text based on a given seed using
+# This class, given a Markov corpus, will attempt to construct a new text based on a given seed using
 # the Markov associations.
 module Markovian
   class TextBuilder
-    attr_reader :seed_text, :chain_set
-    def initialize(chain_set)
-      @chain_set = chain_set
+    attr_reader :seed_text, :corpus
+    def initialize(corpus)
+      @corpus = corpus
     end
 
     def construct(seed_text:, length: 140, start_result_with_seed_word: false)
@@ -34,7 +34,7 @@ module Markovian
 
     def result_with_next_word(previous_pair:, result:, length:)
       previous_word, current_word = previous_pair
-      if next_word = chain_set.next_word(current_word, previous_word: previous_word)
+      if next_word = corpus.next_word(current_word, previous_word: previous_word)
         # we use join rather than + to avoid leading spaces, and strip to ignore leading nils or
         # empty strings
         interim_result = format_result_array([result, next_word])

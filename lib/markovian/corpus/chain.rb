@@ -4,7 +4,7 @@ require 'markovian/corpus/dictionary'
 # for small sample sizes, we track multiple chains (derived from both two-word phrases and single
 # word). Phrases are prefered, but if we can't find a match, we'll try with a single word.
 module Markovian
-  module Corpus
+  class Corpus
     class Chain
       def initialize
         @one_key_dictionary = Dictionary.new

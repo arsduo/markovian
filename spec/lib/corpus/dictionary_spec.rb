@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Markovian
-  module Corpus
+  class Corpus
     class Chain
       RSpec.describe Dictionary do
         let(:dictionary) { Dictionary.new }

@@ -4,7 +4,7 @@
 #
 # The key is an opaque value, which could represent either a single word or a phrase as desired.
 module Markovian
-  module Corpus
+  class Corpus
     class Dictionary
       def push(key, word)
         dictionary[key] += [word]
