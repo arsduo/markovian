@@ -1,6 +1,6 @@
 require 'markovian/utils/text_splitter'
 
-# Given a text to analyze, this class returns a hash of Markov results: two-word phrases (two by
+# Given a piece of text, this class returns a hash of Markov results: two-word phrases (two by
 # default) pointing to an array of historical next words.
 #
 # So, for instance, the phrase "Cats are cute, cats are annoying" would map to:
@@ -18,22 +18,26 @@ require 'markovian/utils/text_splitter'
 # * Capitalization is deferred for later.
 module Markovian
   class Corpus
-    class TextCompiler
+    class Compiler
       # Pass in a text, and optionally an existing Markov chain to add data to. In many cases, you
       # may be building a chain using a set of smaller texts instead of one large texts (dialog,
       # for instance, or Twitter archives), and so may call this class repeatedly for elements of
       # the parent corpus.
-      attr_reader :text, :corpus
-      def initialize(text, starter_corpus = Corpus.new)
-        @text = text
+      attr_reader :corpus
+      def initialize(starter_corpus = Corpus.new)
         @corpus = starter_corpus
       end
 
-      def incorporate_into_chain
-        add_text_to_chain(interesting_split_text, forward_chain)
+      def build_corpus(texts)
+        texts.each {|t| incorporate_text_into_corpus(t)}
+        corpus
+      end
+
+      def incorporate_text_into_corpus(text)
+        add_text_to_chain(split_into_components(text), forward_chain)
         # to assemble backward text, we just create a corpus with all the texts reversed
         # that allows us to see what words precede any given word
-        add_text_to_chain(interesting_split_text.reverse, backward_chain)
+        add_text_to_chain(split_into_components(text).reverse, backward_chain)
         corpus
       end
 
@@ -58,8 +62,8 @@ module Markovian
         end
       end
 
-      def interesting_split_text
-        @interesting_split_text ||= Utils::TextSplitter.new(text).components
+      def split_into_components(text)
+        Utils::TextSplitter.new(text).components
       end
     end
   end
