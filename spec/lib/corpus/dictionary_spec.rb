@@ -28,6 +28,14 @@ module Markovian
             expect(7.times.map { dictionary.next_word(phrase) }).to eq(result)
           end
         end
+
+        describe "#random_word" do
+          it "gets a random word from the dictionary", temporary_srand: 20 do
+            dictionary.push(phrase, word)
+            dictionary.push(word, word2)
+            expect(3.times.map { dictionary.random_word }).to eq([word, phrase, word])
+          end
+        end
       end
     end
   end

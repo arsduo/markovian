@@ -14,6 +14,10 @@ module Markovian
         dictionary[key].sample
       end
 
+      def random_word
+        dictionary.keys.sample
+      end
+
       protected
 
       def dictionary

@@ -31,5 +31,13 @@ module Markovian
         corpus.previous_word(word)
       end
     end
+
+    describe "#random_word" do
+      it "asks the one-key dictionary for a random word" do
+        result = double("random word")
+        allow(corpus.forward).to receive(:random_word).and_return(result)
+        expect(corpus.random_word).to eq(result)
+      end
+    end
   end
 end

@@ -18,5 +18,9 @@ module Markovian
       # backward goes in the opposite direction to forward
       backward.next_word(word, previous_word: following_word)
     end
+
+    def random_word
+      forward.random_word
+    end
   end
 end

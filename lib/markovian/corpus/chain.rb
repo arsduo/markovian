@@ -22,6 +22,10 @@ module Markovian
         result_for_two_words(previous_word, word) || result_for_one_word(word)
       end
 
+      def random_word
+        one_key_dictionary.random_word
+      end
+
       protected
 
       def result_for_two_words(previous_word, word)

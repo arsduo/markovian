@@ -72,6 +72,14 @@ module Markovian
           end
         end
       end
+
+      describe "#random_word" do
+        it "asks the one-key dictionary for a random word" do
+          result = double("random word")
+          allow(chain.one_key_dictionary).to receive(:random_word).and_return(result)
+          expect(chain.random_word).to eq(result)
+        end
+      end
     end
   end
 end
