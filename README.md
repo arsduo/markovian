@@ -19,20 +19,11 @@ Fuller documentation will come shortly. For now, let's see how we can use Markov
  => path_to_twitter_archive
 > importer = Markovian::Importers::Twitter::CsvImporter.new(path)
  => #<Markovian::Importers::Twitter::CsvImporter:0x007fd0ca3282a8 @path=path_to_twitter_archive>
-> tweets = importer.texts_for_markov_analysis; puts tweets.count
-14394
- => nil
-
-# Create a Chainset (the structure holding all the word relations)...
-> chainset = Markovian::ChainSet.new
- => #<Markovian::ChainSet:0x007fd0ca03df70 ...>
-# And add all the tweets to the Markov dictionary
-> tweets.each {|t| Markovian::Chain::TextCompiler.new(t, chainset).incorporate_into_chain}; puts "done."
-done.
- => nil
-
+# now assemble the corpus of tweets -- this may take a few seconds to compile
+> corpus = importer.corpus
+ => #<Markovian::Corpus:0x007fd0ca03df70 ...>
 # Now, we can build some text!
-> Markovian::TextBuilder.new("markov", chainset).construct
+> Markovian::TextBuilder.new(corpus).construct("markov")
 => "markov chains a lot better than a month, i've been here half an hour of night when you can get behind belgium for the offline train journey"
 ```
 
