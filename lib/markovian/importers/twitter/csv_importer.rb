@@ -17,6 +17,10 @@ module Markovian
           tweet_enumerator.reject {|t| t.empty?}
         end
 
+        def corpus
+          Corpus::Compiler.new.build_corpus(texts_for_markov_analysis)
+        end
+
         protected
 
         def csv_enumerator
