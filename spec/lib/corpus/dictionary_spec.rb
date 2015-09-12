@@ -63,6 +63,16 @@ module Markovian
             expect(dictionary).not_to eq(other_dictionary)
           end
         end
+
+        describe "#inspect" do
+          it "contains the entry count rather than the dictionary" do
+            dictionary.push(phrase, word)
+            dictionary.push(word, word2)
+            expect(dictionary.inspect).to include("2 entries")
+            expect(dictionary.inspect).not_to include(phrase)
+            expect(dictionary.inspect).not_to include(word)
+          end
+        end
       end
     end
   end

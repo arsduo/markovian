@@ -22,6 +22,13 @@ module Markovian
         self.dictionary == other.dictionary
       end
 
+      # We override this method to avoid spitting out every single element in the dictionary if
+      # this (or any object containing it) gets inspected.
+      # See http://stackoverflow.com/questions/5771339/emulate-default-objectinspect-output.
+      def inspect
+        "#<#{self.class}:0x#{__id__.to_s(16)} @dictionary: #{dictionary.length} entries>"
+      end
+
       protected
 
       def dictionary
