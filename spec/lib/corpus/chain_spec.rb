@@ -80,6 +80,33 @@ module Markovian
           expect(chain.random_word).to eq(result)
         end
       end
+
+      describe "#==" do
+        let(:other_chain) { Chain.new }
+
+        it "returns true if they're the same" do
+          chain.lengthen(word, next_word: word_association)
+          chain.lengthen(word_association, next_word: word)
+          other_chain.lengthen(word, next_word: word_association)
+          other_chain.lengthen(word_association, next_word: word)
+          expect(chain).to eq(other_chain)
+        end
+
+        it "is order agnostic" do
+          chain.lengthen(word, next_word: word_association)
+          chain.lengthen(word_association, next_word: word)
+          other_chain.lengthen(word_association, next_word: word)
+          other_chain.lengthen(word, next_word: word_association)
+          expect(chain).to eq(other_chain)
+        end
+
+        it "returns false if they're not the same " do
+          chain.lengthen(word, next_word: word_association)
+          chain.lengthen(word_association, next_word: word)
+          other_chain.lengthen(word, next_word: word_association)
+          expect(chain).not_to eq(other_chain)
+        end
+      end
     end
   end
 end

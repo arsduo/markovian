@@ -18,6 +18,10 @@ module Markovian
         dictionary.keys.sample
       end
 
+      def ==(other)
+        self.dictionary == other.dictionary
+      end
+
       protected
 
       def dictionary

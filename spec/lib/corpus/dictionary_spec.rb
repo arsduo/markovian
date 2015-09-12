@@ -36,6 +36,33 @@ module Markovian
             expect(3.times.map { dictionary.random_word }).to eq([word, phrase, word])
           end
         end
+
+        describe "#==" do
+          let(:other_dictionary) { Dictionary.new }
+
+          it "returns true if they're both the same" do
+            dictionary.push(phrase, word)
+            dictionary.push(word, word2)
+            other_dictionary.push(phrase, word)
+            other_dictionary.push(word, word2)
+            expect(dictionary).to eq(other_dictionary)
+          end
+
+          it "is order agnostic" do
+            dictionary.push(phrase, word)
+            dictionary.push(word, word2)
+            other_dictionary.push(word, word2)
+            other_dictionary.push(phrase, word)
+            expect(dictionary).to eq(other_dictionary)
+          end
+
+          it "returns false if they're not both the same" do
+            dictionary.push(phrase, word)
+            dictionary.push(word, word2)
+            other_dictionary.push(phrase, word)
+            expect(dictionary).not_to eq(other_dictionary)
+          end
+        end
       end
     end
   end

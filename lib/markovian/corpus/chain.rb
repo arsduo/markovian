@@ -26,6 +26,11 @@ module Markovian
         one_key_dictionary.random_word
       end
 
+      def ==(other)
+        self.one_key_dictionary == other.one_key_dictionary &&
+          self.two_key_dictionary == other.two_key_dictionary
+      end
+
       protected
 
       def result_for_two_words(previous_word, word)

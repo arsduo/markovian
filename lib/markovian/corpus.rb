@@ -22,5 +22,10 @@ module Markovian
     def random_word
       forward.random_word
     end
+
+    def ==(other)
+      self.forward == other.forward &&
+        self.backward == other.backward
+    end
   end
 end

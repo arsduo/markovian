@@ -39,5 +39,35 @@ module Markovian
         expect(corpus.random_word).to eq(result)
       end
     end
+
+
+    describe "#==" do
+      let(:other_corpus) { Corpus.new }
+      let(:word) { Faker::Lorem.word }
+      let(:other_word) { Faker::Lorem.word }
+
+      it "returns true if they're both the same" do
+        corpus.forward.lengthen(other_word, next_word: word)
+        corpus.backward.lengthen(word, next_word: other_word)
+        other_corpus.forward.lengthen(other_word, next_word: word)
+        other_corpus.backward.lengthen(word, next_word: other_word)
+        expect(corpus).to eq(other_corpus)
+      end
+
+      it "is order agnostic" do
+        corpus.forward.lengthen(other_word, next_word: word)
+        corpus.backward.lengthen(word, next_word: other_word)
+        other_corpus.backward.lengthen(word, next_word: other_word)
+        other_corpus.forward.lengthen(other_word, next_word: word)
+        expect(corpus).to eq(other_corpus)
+      end
+
+      it "returns false if they're not both the same" do
+        corpus.forward.lengthen(other_word, next_word: word)
+        corpus.backward.lengthen(word, next_word: other_word)
+        other_corpus.forward.lengthen(other_word, next_word: word)
+        expect(corpus).not_to eq(other_corpus)
+      end
+    end
   end
 end
