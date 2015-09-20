@@ -1,17 +1,20 @@
-# This class represents a dictionary of words or phrases and the various words that can follow
-# them.  Currently it's implemented as a hash of arrays, but more advanced representations may
-# follow.
+require 'markovian/corpus/dictionary_entry'
 #
-# The key is an opaque value, which could represent either a single word or a phrase as desired.
+# This class represents a dictionary of words or phrases and the various words that can follow
+# them. The key is an opaque value, which could represent either a single word or a phrase as desired.
 module Markovian
   class Corpus
     class Dictionary
-      def push(key, word)
-        dictionary[key] += [word]
+      def push(key, word, direction: :forwards)
+        dictionary[key].push(word, direction: direction)
       end
 
       def next_word(key)
-        dictionary[key].sample
+        dictionary[key].next_word
+      end
+
+      def previous_word(key)
+        dictionary[key].previous_word
       end
 
       def random_word
@@ -32,7 +35,9 @@ module Markovian
       protected
 
       def dictionary
-        @dictionary ||= Hash.new([])
+        # We have to set the value of the hash in the block, otherwise it doesn't actually seem to
+        # get saved properly. Default hash values behave weirdly in general.
+        @dictionary ||= Hash.new {|hash, key| hash[key] = DictionaryEntry.new(key)}
       end
     end
   end

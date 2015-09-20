@@ -9,23 +9,35 @@ module Markovian
         let(:word) { Faker::Lorem.word }
         let(:word2) { Faker::Lorem.word }
 
-        describe "push/next_word" do
-          it "returns the word for the phrase" do
-            # since there's only one word it'll always return the one word
-            dictionary.push(phrase, word)
-            expect(dictionary.next_word(phrase)).to eq(word)
+        describe "next_word" do
+          it "pushes a word to the appropriate dictionary entry (forwards default)" do
+            expect_any_instance_of(DictionaryEntry).to receive(:push).with(word2, direction: :forwards) do |entry|
+              expect(entry.word).to eq(word)
+            end
+            dictionary.push(word, word2)
           end
 
-          it "samples from the remaining words", temporary_srand: 17 do
-            # fix the order of sampling so we can reproduce the test
+          it "will push backwards if specified" do
+            expect_any_instance_of(DictionaryEntry).to receive(:push).with(word2, direction: :backwards) do |entry|
+              expect(entry.word).to eq(word)
+            end
+            dictionary.push(word, word2, direction: :backwards)
+          end
+        end
+
+        describe "#next_word" do
+          it "gets an appropriate word", temporary_srand: 21 do
             dictionary.push(phrase, word)
             dictionary.push(phrase, word2)
-            if RUBY_PLATFORM == "java"
-              result = [word2, word2, word2, word, word, word2, word]
-            else
-              result = [word, word2, word, word2, word, word2, word]
-            end
-            expect(7.times.map { dictionary.next_word(phrase) }).to eq(result)
+            expect(3.times.map { dictionary.next_word(phrase)}).to eq([word, word2, word])
+          end
+        end
+
+        describe "#previous_word" do
+          it "gets an appropriate word", temporary_srand: 21 do
+            dictionary.push(phrase, word, direction: :backwards)
+            dictionary.push(phrase, word2, direction: :backwards)
+            expect(3.times.map { dictionary.previous_word(phrase)}).to eq([word, word2, word])
           end
         end
 
