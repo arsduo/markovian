@@ -11,7 +11,6 @@ module Markovian
         @two_key_dictionary = Dictionary.new
       end
 
-      attr_reader :one_key_dictionary, :two_key_dictionary
       def lengthen(word, next_word:, previous_word: nil)
         @one_key_dictionary.push(word, next_word)
         @two_key_dictionary.push(two_word_key(previous_word, word), next_word)
@@ -33,6 +32,9 @@ module Markovian
 
       protected
 
+      # for equality checking
+      attr_reader :one_key_dictionary, :two_key_dictionary
+
       def result_for_two_words(previous_word, word)
         @two_key_dictionary.next_word(two_word_key(previous_word, word)) if previous_word
       end
@@ -49,4 +51,3 @@ module Markovian
     end
   end
 end
-

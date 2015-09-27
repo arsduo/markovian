@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.0
+
+* Refactor Dictionary to use DictionaryEntry objects, which can store additional metadata
+
 ## 0.2.0
 
 * Rename Chainset/Chain to Corpus (better name is better)
