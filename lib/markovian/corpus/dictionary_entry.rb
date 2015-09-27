@@ -36,8 +36,17 @@ module Markovian
       # for equality checking
       attr_reader :next_words, :previous_words
 
+      VALID_DIRECTIONS = [:backwards, :forwards]
+
       def array_for_direction(direction)
+        validate_direction(direction)
         direction == :backwards ? previous_words : next_words
+      end
+
+      def validate_direction(direction)
+        unless VALID_DIRECTIONS.include?(direction)
+          raise ArgumentError.new("Invalid direction #{direction.inspect}, valid directions are #{VALID_DIRECTIONS.inspect}")
+        end
       end
     end
   end

@@ -14,6 +14,10 @@ module Markovian
         end
 
         describe "pushing and retrieving words" do
+          it "raises an error if the direction is invalid" do
+            expect { entry.push(next_word, direction: :sideways) }.to raise_exception(ArgumentError)
+          end
+
           context "going forward (the default)" do
             it "returns the next word if desired" do
               # since there's only one word it'll always return the same value
@@ -46,23 +50,23 @@ module Markovian
           context "going backward" do
             it "returns the next word if desired" do
               # since there's only one word it'll always return the same value
-              entry.push(next_word, direction: :backward)
+              entry.push(next_word, direction: :backwards)
               expect(entry.previous_word).to eq(next_word)
             end
 
             it "doesn't populate the forward entries" do
-              entry.push(next_word, direction: :backward)
+              entry.push(next_word, direction: :backwards)
               expect(entry.next_word).to be_nil
             end
 
             it "doesn't increase the seen count" do
-              expect { 3.times { entry.push(next_word, direction: :backward) } }.not_to change { entry.count }
+              expect { 3.times { entry.push(next_word, direction: :backwards) } }.not_to change { entry.count }
             end
 
             it "samples from the entered words", temporary_srand: 17 do
               # fix the order of sampling so we can reproduce the test
-              entry.push(next_word, direction: :backward)
-              entry.push(other_word, direction: :backward)
+              entry.push(next_word, direction: :backwards)
+              entry.push(other_word, direction: :backwards)
               if RUBY_PLATFORM == "java"
                 result = [next_word, next_word, next_word, other_word, other_word, next_word, word]
               else
