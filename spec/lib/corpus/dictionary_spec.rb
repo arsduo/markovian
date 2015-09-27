@@ -29,7 +29,8 @@ module Markovian
           it "gets an appropriate word", temporary_srand: 21 do
             dictionary.push(phrase, word)
             dictionary.push(phrase, word2)
-            expect(3.times.map { dictionary.next_word(phrase)}).to eq([word, word2, word])
+            result = RUBY_PLATFORM == "java" ? [word, word, word2] : [word, word2, word]
+            expect(3.times.map { dictionary.next_word(phrase)}).to eq(result)
           end
         end
 
@@ -37,7 +38,8 @@ module Markovian
           it "gets an appropriate word", temporary_srand: 21 do
             dictionary.push(phrase, word, direction: :backwards)
             dictionary.push(phrase, word2, direction: :backwards)
-            expect(3.times.map { dictionary.previous_word(phrase)}).to eq([word, word2, word])
+            result = RUBY_PLATFORM == "java" ? [word, word, word2] : [word, word2, word]
+            expect(3.times.map { dictionary.previous_word(phrase)}).to eq(result)
           end
         end
 

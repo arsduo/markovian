@@ -39,7 +39,7 @@ module Markovian
               entry.push(next_word)
               entry.push(other_word)
               if RUBY_PLATFORM == "java"
-                result = [next_word, next_word, next_word, other_word, other_word, next_word, word]
+                result = [next_word, other_word, other_word, other_word, other_word, next_word, next_word]
               else
                 result = [next_word, next_word, other_word, next_word, other_word, next_word, other_word]
               end
@@ -68,7 +68,7 @@ module Markovian
               entry.push(next_word, direction: :backwards)
               entry.push(other_word, direction: :backwards)
               if RUBY_PLATFORM == "java"
-                result = [next_word, next_word, next_word, other_word, other_word, next_word, word]
+                result = [next_word, other_word, other_word, other_word, other_word, next_word, next_word]
               else
                 result = [next_word, next_word, other_word, next_word, other_word, next_word, other_word]
               end

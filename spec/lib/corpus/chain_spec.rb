@@ -77,7 +77,11 @@ module Markovian
         it "asks the one-key dictionary for a random word", temporary_srand: 35 do
           chain.lengthen(word, next_word: word_association)
           chain.lengthen(word_association, next_word: word)
-          expect(3.times.map { chain.random_word }).to eq([word, word_association, word_association])
+          if RUBY_PLATFORM == "java"
+            expect(3.times.map { chain.random_word }).to eq([word, word, word_association])
+          else
+            expect(3.times.map { chain.random_word }).to eq([word, word_association, word_association])
+          end
         end
       end
 
