@@ -1,8 +1,11 @@
 # CHANGELOG
 
-## 0.3.0
+## 0.2.9
+
+Internal refactors only, no new functionality.
 
 * Refactor Dictionary to use DictionaryEntry objects, which can store additional metadata
+* Use Tokeneyes to parse strings rather than the original String#split-based TextSplitter
 
 ## 0.2.0
 

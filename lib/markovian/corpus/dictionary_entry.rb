@@ -10,7 +10,8 @@ module Markovian
       end
 
       def push(word, direction: :forwards)
-        array_for_direction(direction) << word
+        # The incoming word will be a Tokeneyes::Word object
+        array_for_direction(direction) << word.to_s
         # we don't want to double-count words if we read the text both forward and backward, so
         # only count in the forward direction. (If we encounter a scenario where someone only wants
         # to read in the backward direction, we can deal with that then.)
