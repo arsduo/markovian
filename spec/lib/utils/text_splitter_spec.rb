@@ -6,7 +6,7 @@ module Markovian
       describe "#components" do
         shared_examples_for :splitting_text do
           it "downcases and splits the text properly" do
-            expect(TextSplitter.new(text).components).to eq(result)
+            expect(TextSplitter.new(text).components.map(&:to_s)).to eq(result)
           end
         end
 
@@ -31,13 +31,6 @@ module Markovian
           it_should_behave_like :splitting_text
         end
 
-        context "when the text has a colon with no space" do
-          let(:text) { "hello I am:writing code" }
-          let(:result) { ["hello", "i", "am:writing", "code"] }
-
-          it_should_behave_like :splitting_text
-        end
-
         context "when the text has a colon with a space" do
           let(:text) { "hello I am: writing code" }
           let(:result) { ["hello", "i", "am", "writing", "code"] }
@@ -54,14 +47,14 @@ module Markovian
 
         context "when the text has some leading punctuation" do
           let(:text) { ".hello I am writing code" }
-          let(:result) { [".hello", "i", "am", "writing", "code"] }
+          let(:result) { ["hello", "i", "am", "writing", "code"] }
 
           it_should_behave_like :splitting_text
         end
 
         context "when the text has some leading punctuation and a twitter mention" do
           let(:text) { ".@hello I am writing code" }
-          let(:result) { [".@hello", "i", "am", "writing", "code"] }
+          let(:result) { ["@hello", "i", "am", "writing", "code"] }
 
           it_should_behave_like :splitting_text
         end

@@ -6,7 +6,8 @@ module Markovian
   class Corpus
     class Dictionary
       def push(key, word, direction: :forwards)
-        dictionary[key].push(word, direction: direction)
+        # Incoming we get a Tokeneyes::Word object
+        dictionary[key.to_s].push(word, direction: direction)
       end
 
       def next_word(key)

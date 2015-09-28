@@ -58,7 +58,8 @@ module Markovian
     end
 
     def split_seed_text(seed_text)
-      Utils::TextSplitter.new(seed_text).components
+      # We get back Tokeneyes::Word objects, but for now only care about the strings within
+      Utils::TextSplitter.new(seed_text).components.map(&:to_s)
     end
   end
 end
