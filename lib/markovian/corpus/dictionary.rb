@@ -5,17 +5,9 @@ require 'markovian/corpus/dictionary_entry'
 module Markovian
   class Corpus
     class Dictionary
-      def push(key, word, direction: :forwards)
-        # Incoming we get a Tokeneyes::Word object
-        dictionary[key.to_s].push(word, direction: direction)
-      end
-
-      def next_word(key)
-        dictionary[key].next_word
-      end
-
-      def previous_word(key)
-        dictionary[key].previous_word
+      def [](key)
+        # Key could be a string or a Tokeneyes::Word object
+        dictionary[key.to_s]
       end
 
       def random_word
