@@ -12,13 +12,15 @@ module Markovian
       end
 
       def lengthen(word, next_word:, previous_word: nil)
-        @one_key_dictionary.push(word, next_word)
-        @two_key_dictionary.push(two_word_key(previous_word, word), next_word)
+        @one_key_dictionary[word].push(next_word)
+        @two_key_dictionary[two_word_key(previous_word, word)].push(next_word)
         word
       end
 
       def next_word(word, previous_word: nil)
-        result_for_two_words(previous_word, word) || result_for_one_word(word)
+        if dictionary_entry = entry(word, previous_word)
+          dictionary_entry.next_word
+        end
       end
 
       def random_word
@@ -35,12 +37,28 @@ module Markovian
       # for equality checking
       attr_reader :one_key_dictionary, :two_key_dictionary
 
-      def result_for_two_words(previous_word, word)
-        @two_key_dictionary.next_word(two_word_key(previous_word, word)) if previous_word
+      def entry(word, previous_word = nil)
+        if previous_word
+          entry_for_two_words(previous_word, word) || entry_for_one_word(word)
+        else
+          entry_for_one_word(word)
+        end
       end
 
-      def result_for_one_word(word)
-        @one_key_dictionary.next_word(word)
+      def entry_for_two_words(previous_word, word)
+        entry_if_present(@two_key_dictionary[two_word_key(previous_word, word)])
+      end
+
+      def entry_for_one_word(word)
+        # Not strictly necessary, since if there's an empty entry here we'll just get nils, but better to
+        # do it right.
+        entry_if_present(@one_key_dictionary[word])
+      end
+
+      def entry_if_present(entry)
+        # Ignore empty entries that haven't actually been seen in the corpus
+        # TODO refactor to not even create them
+        entry if entry.count > 0
       end
 
       # We represent the two words as a space-delimited phrase for simplicity and speed of access via
