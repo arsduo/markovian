@@ -6,11 +6,11 @@ module Markovian
       RSpec.describe DictionaryEntry do
         let(:word) { Faker::Lorem.word }
         let(:entry) { DictionaryEntry.new(word) }
-        let(:next_word) { Faker::Lorem.word }
-        let(:other_word) { Faker::Lorem.word }
+        let(:next_word) { Tokeneyes::Word.new(Faker::Lorem.word) }
+        let(:other_word) { Tokeneyes::Word.new(Faker::Lorem.word) }
 
-        it "initializes the count to 0" do
-          expect(entry.count).to eq(0)
+        it "initializes the occurrences to 0" do
+          expect(entry.occurrences).to eq(0)
         end
 
         describe "pushing and retrieving words" do
@@ -22,7 +22,7 @@ module Markovian
             it "returns the next word if desired" do
               # since there's only one word it'll always return the same value
               entry.push(next_word)
-              expect(entry.next_word).to eq(next_word)
+              expect(entry.next_word).to eq(next_word.to_s)
             end
 
             it "doesn't populate the previous entries" do
@@ -30,8 +30,15 @@ module Markovian
               expect(entry.previous_word).to be_nil
             end
 
-            it "increases the seen count" do
-              expect { 3.times { entry.push(next_word) } }.to change { entry.count }.from(0).to(3)
+            it "increases the occurence count" do
+              expect { 3.times { entry.push(next_word) } }.to change { entry.occurrences }.from(0).to(3)
+            end
+
+            it "increases the ends_sentence count if appropriate" do
+              entry.push(next_word)
+              next_word.ends_sentence = true
+              entry.push(next_word)
+              expect(entry.counts[:ends_sentence]).to eq(1)
             end
 
             it "samples from the entered words", temporary_srand: 17 do
@@ -43,7 +50,7 @@ module Markovian
               else
                 result = [next_word, next_word, other_word, next_word, other_word, next_word, other_word]
               end
-              expect(7.times.map { entry.next_word }).to eq(result)
+              expect(7.times.map { entry.next_word }).to eq(result.map(&:to_s))
             end
           end
 
@@ -51,7 +58,7 @@ module Markovian
             it "returns the next word if desired" do
               # since there's only one word it'll always return the same value
               entry.push(next_word, direction: :backwards)
-              expect(entry.previous_word).to eq(next_word)
+              expect(entry.previous_word).to eq(next_word.to_s)
             end
 
             it "doesn't populate the forward entries" do
@@ -60,7 +67,14 @@ module Markovian
             end
 
             it "doesn't increase the seen count" do
-              expect { 3.times { entry.push(next_word, direction: :backwards) } }.not_to change { entry.count }
+              expect { 3.times { entry.push(next_word, direction: :backwards) } }.not_to change { entry.occurrences }
+            end
+
+            it "doesn't increase the ends_sentence count" do
+              entry.push(next_word, direction: :backwards)
+              next_word.ends_sentence = true
+              entry.push(next_word, direction: :backwards)
+              expect(entry.counts[:ends_sentence]).to eq(0)
             end
 
             it "samples from the entered words", temporary_srand: 17 do
@@ -72,7 +86,7 @@ module Markovian
               else
                 result = [next_word, next_word, other_word, next_word, other_word, next_word, other_word]
               end
-              expect(7.times.map { entry.previous_word }).to eq(result)
+              expect(7.times.map { entry.previous_word }).to eq(result.map(&:to_s))
             end
           end
         end
@@ -100,7 +114,7 @@ module Markovian
             entry.push(next_word)
             entry.push(other_word, direction: :backwards)
             other_entry = DictionaryEntry.new(word)
-            other_entry.push(Faker::Lorem.word)
+            other_entry.push(Tokeneyes::Word.new(Faker::Lorem.word))
             other_entry.push(other_word, direction: :backwards)
             expect(entry).not_to eq(other_entry)
           end
@@ -110,7 +124,7 @@ module Markovian
             entry.push(other_word, direction: :backwards)
             other_entry = DictionaryEntry.new(word)
             other_entry.push(next_word)
-            other_entry.push(other_word + "foo", direction: :backwards)
+            other_entry.push(Tokeneyes::Word.new(other_word.to_s + "foo"), direction: :backwards)
             expect(entry).not_to eq(other_entry)
           end
         end

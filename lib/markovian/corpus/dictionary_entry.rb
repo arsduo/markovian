@@ -1,12 +1,12 @@
 module Markovian
   class Corpus
     class DictionaryEntry
-      attr_reader :word, :count
+      attr_reader :word, :counts
       def initialize(word)
         @word = word
         @next_words = []
         @previous_words = []
-        @count = 0
+        @counts = Hash.new(0)
       end
 
       def push(word, direction: :forwards)
@@ -15,7 +15,10 @@ module Markovian
         # we don't want to double-count words if we read the text both forward and backward, so
         # only count in the forward direction. (If we encounter a scenario where someone only wants
         # to read in the backward direction, we can deal with that then.)
-        @count += 1 if direction == :forwards
+        if direction == :forwards
+          @counts[:total] += 1
+          @counts[:ends_sentence] += 1 if word.ends_sentence?
+        end
       end
 
       def next_word
@@ -32,9 +35,13 @@ module Markovian
           self.previous_words == other.previous_words
       end
 
+      def occurrences
+        counts[:total]
+      end
+
       protected
 
-      # for equality checking
+      # for equality checking and other usage
       attr_reader :next_words, :previous_words
 
       VALID_DIRECTIONS = [:backwards, :forwards]
