@@ -17,18 +17,18 @@ module Markovian
 
       before :each do
         # freeze randomness
-        # jruby on travis has some weirdness around the keyword arg, so we treat is as a hash in
+        # jruby on travis has some weirdness around the keyword arg, so we treat it as a hash in
         # the tests
         allow(corpus).to receive(:next_word) do |current_word, params = {}|
           # simple mechanism to the next word
           previous_word = params[:previous_word]
-          if current_index = stream_of_words.index(current_word)
+          if current_index = stream_of_words.index(current_word.to_s)
             # since the stream is purely linear, we can also ensure that we're calling the words in
             # the right sequence
             if current_index == 0
               expect(previous_word).to be_nil
             else
-              expect(previous_word).to eq(stream_of_words[current_index - 1])
+              expect(previous_word.to_s).to eq(stream_of_words[current_index - 1])
             end
           end
           stream_of_words[current_index.to_i + 1]
@@ -54,20 +54,6 @@ module Markovian
 
       it "works fine if there's only one word in the seed text" do
         expect(builder.construct("going")).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
-      end
-    end
-
-    describe "#identify_starter_text" do
-      context "if the seed has multiple words" do
-        it "returns the last two items" do
-          expect(builder.identify_starter_text(seed_text)).to eq(["going", "on"])
-        end
-      end
-
-      context "if the seed is only one word" do
-        it "returns [nil, the_word]" do
-          expect(builder.identify_starter_text("result ")).to eq([nil, "result"])
-        end
       end
     end
   end

@@ -12,16 +12,18 @@ module Markovian
     def construct(seed_text, length: 140, exclude_seed_text: false)
       # TODO: if we don't hit a result for the first pair, move backward through the original text
       # until we get something
-      seed_pair = identify_starter_text(seed_text)
-      result_with_next_word(
-        previous_pair: seed_pair,
-        result: exclude_seed_text ? nil : seed_text,
+      seed_components = split_seed_text(seed_text)
+      result_array = result_with_next_word(
+        previous_pair: identify_starter_text(seed_components),
+        result: exclude_seed_text ? [] : seed_components,
         length: length
       )
+      format_result_array(result_array)
     end
 
-    def identify_starter_text(raw_text)
-      seed_components = split_seed_text(raw_text)
+    protected
+
+    def identify_starter_text(seed_components)
       if seed_components.length >= 2
         seed_components[-2..-1]
       else
@@ -30,15 +32,13 @@ module Markovian
       end
     end
 
-    protected
-
     def result_with_next_word(previous_pair:, result:, length:)
       previous_word, current_word = previous_pair
       if next_word = corpus.next_word(current_word, previous_word: previous_word)
         # we use join rather than + to avoid leading spaces, and strip to ignore leading nils or
         # empty strings
-        interim_result = format_result_array([result, next_word])
-        if interim_result.length > length
+        interim_result = result + [next_word]
+        if format_result_array(interim_result).length > length
           result
         else
           result_with_next_word(
@@ -52,14 +52,15 @@ module Markovian
       end
     end
 
-    # Turn an array of words into an ongoing string
+    # Turn an array of Word objects into an ongoing string
     def format_result_array(array_of_words)
-      array_of_words.compact.map(&:strip).join(" ")
+      array_of_words.compact.map(&:to_s).map(&:strip).join(" ")
     end
 
     def split_seed_text(seed_text)
       # We get back Tokeneyes::Word objects, but for now only care about the strings within
-      Utils::TextSplitter.new(seed_text).components.map(&:to_s)
+      Utils::TextSplitter.new(seed_text).components
+    end
     end
   end
 end
