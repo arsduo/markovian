@@ -9,13 +9,13 @@ module Markovian
       @corpus = corpus
     end
 
-    def construct(seed_text, length: 140, start_result_with_seed: false)
+    def construct(seed_text, length: 140, exclude_seed_text: false)
       # TODO: if we don't hit a result for the first pair, move backward through the original text
       # until we get something
       seed_pair = identify_starter_text(seed_text)
       result_with_next_word(
         previous_pair: seed_pair,
-        result: start_result_with_seed ? seed_text : nil,
+        result: exclude_seed_text ? nil : seed_text,
         length: length
       )
     end

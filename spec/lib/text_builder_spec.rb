@@ -36,24 +36,24 @@ module Markovian
       end
 
       it "builds a text of the right length" do
-        expect(builder.construct(seed_text)).to eq("voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
+        expect(builder.construct(seed_text)).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
 
       it "accepts a shorter length" do
-        expect(builder.construct(seed_text, length: 20)).to eq("voluptate debitis")
+        expect(builder.construct(seed_text, length: 20)).to eq("going on voluptate")
       end
 
-      it "includes the original seed text if desired" do
-        expect(builder.construct("going! on?", start_result_with_seed: true)).to eq("going! on? voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+      it "excludes the original seed text if desired" do
+        expect(builder.construct("going! on?", exclude_seed_text: true)).to eq("voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
       end
 
       it "ignores leading spaces" do
         stream_of_words[3] = " foo "
-        expect(builder.construct(seed_text)).to eq("voluptate foo rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam distinctio")
+        expect(builder.construct(seed_text)).to eq("going on voluptate foo rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
 
       it "works fine if there's only one word in the seed text" do
-        expect(builder.construct("going")).to eq("on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+        expect(builder.construct("going")).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
     end
 
