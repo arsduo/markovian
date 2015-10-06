@@ -1,4 +1,5 @@
 require 'markovian/corpus/dictionary'
+require 'markovian/text_builder/end_of_sentence_filter'
 
 # The Chain represents Markov info as it's being assembled or expanded from a text. To compensate
 # for small sample sizes, we track multiple chains (derived from both two-word phrases and single
@@ -58,7 +59,7 @@ module Markovian
       def entry_if_present(entry)
         # Ignore empty entries that haven't actually been seen in the corpus
         # TODO refactor to not even create them
-        entry if entry.count > 0
+        entry if entry.occurrences > 0
       end
 
       # We represent the two words as a space-delimited phrase for simplicity and speed of access via
