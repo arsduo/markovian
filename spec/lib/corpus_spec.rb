@@ -40,7 +40,6 @@ module Markovian
       end
     end
 
-
     describe "#==" do
       let(:other_corpus) { Corpus.new }
       let(:word) { Faker::Lorem.word }
