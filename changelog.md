@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.0
+
+* Refactor Dictionary to provide access to entries, removing a lot of method duplication
+
 ## 0.2.9
 
 Internal refactors only, no new functionality.
