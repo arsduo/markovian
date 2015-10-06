@@ -5,7 +5,10 @@ gemspec
 
 group :development, :test do
   gem "byebug", platform: :mri
-  gem "tokeneyes", path: "../tokeneyes"
+  # If you're developing both gems, use the local version of Tokeneyes
+  if File.exist?("../tokeneyes")
+    gem "tokeneyes", path: "../tokeneyes"
+  end
 end
 
 group :test do
