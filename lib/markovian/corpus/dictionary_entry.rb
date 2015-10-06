@@ -1,6 +1,9 @@
 module Markovian
   class Corpus
     class DictionaryEntry
+      # Below this, we don't have enough occurrences to draw conclusions about how a word is used.
+      SIGNIFICANT_OCCURRENCE_THRESHOLD = 50
+
       attr_reader :word, :counts
       def initialize(word)
         @word = word
@@ -37,6 +40,13 @@ module Markovian
 
       def occurrences
         counts[:total]
+      end
+
+      def likelihood_to_end_sentence
+        # if we don't have enough data, we don't have enough data
+        if occurrences >= SIGNIFICANT_OCCURRENCE_THRESHOLD
+          counts[:ends_sentence].to_f / occurrences
+        end
       end
 
       protected
