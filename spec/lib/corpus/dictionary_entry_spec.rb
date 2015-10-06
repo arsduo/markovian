@@ -110,7 +110,7 @@ module Markovian
             entry.push(other_word, direction: :backwards)
             other_entry = DictionaryEntry.new(word)
             other_entry.push(next_word)
-            other_entry.push(Faker::Lorem.word, direction: :backwards)
+            other_entry.push(other_word + "foo", direction: :backwards)
             expect(entry).not_to eq(other_entry)
           end
         end
