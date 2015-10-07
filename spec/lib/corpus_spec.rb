@@ -42,8 +42,8 @@ module Markovian
 
     describe "#==" do
       let(:other_corpus) { Corpus.new }
-      let(:word) { Faker::Lorem.word }
-      let(:other_word) { Faker::Lorem.word }
+      let(:word) { Tokeneyes::Word.new(Faker::Lorem.word) }
+      let(:other_word) { Tokeneyes::Word.new(Faker::Lorem.word) }
 
       it "returns true if they're both the same" do
         corpus.forward.lengthen(other_word, next_word: word)
