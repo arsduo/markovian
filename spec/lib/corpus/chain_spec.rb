@@ -9,6 +9,12 @@ module Markovian
       let(:previous_word) { Tokeneyes::Word.new(Faker::Lorem.word) }
       let(:phrase_association) { Tokeneyes::Word.new(Faker::Lorem.word) }
 
+      describe "#word_entry" do
+        it "returns the dictionary entry for the word" do
+          expect(chain.word_entry(word)).to eq(DictionaryEntry.new(word))
+        end
+      end
+
       describe "#next_word" do
         it "returns no values when empty" do
           expect(chain.next_word(word)).to be_nil

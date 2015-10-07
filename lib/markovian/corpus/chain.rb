@@ -11,6 +11,12 @@ module Markovian
         @two_key_dictionary = Dictionary.new
       end
 
+      # Allow access to a word's metadata by providing its dictionary entry. For now, we only do
+      # individual words, not two-word phrases.
+      def word_entry(word)
+        @one_key_dictionary[word]
+      end
+
       def lengthen(word, next_word:, previous_word: nil)
         # When we encounter a word, we track its metadata and and what words surround it
         write_to_dictionary(@one_key_dictionary, word, word, next_word)
