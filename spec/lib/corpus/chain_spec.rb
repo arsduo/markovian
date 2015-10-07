@@ -27,6 +27,11 @@ module Markovian
             it "returns the next word when looking up by phrase" do
               expect(chain.next_word(word, previous_word: previous_word)).to eq(next_word.to_s)
             end
+
+            it "populates the the entry's data" do
+              chain.next_word(word, previous_word: previous_word)
+              expect(chain.word_entry(word).occurrences).to eq(1)
+            end
           end
 
           context "with a phrase match and a single word match" do

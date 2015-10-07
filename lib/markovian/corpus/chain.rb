@@ -12,8 +12,9 @@ module Markovian
       end
 
       def lengthen(word, next_word:, previous_word: nil)
-        @one_key_dictionary[word].push(next_word)
-        @two_key_dictionary[two_word_key(previous_word, word)].push(next_word)
+        # When we encounter a word, we track its metadata and and what words surround it
+        write_to_dictionary(@one_key_dictionary, word, word, next_word)
+        write_to_dictionary(@two_key_dictionary, two_word_key(previous_word, word), word, next_word)
         word
       end
 
@@ -65,6 +66,11 @@ module Markovian
       # hash keys.
       def two_word_key(word1, word2)
         "#{word1} #{word2}"
+      end
+
+      def write_to_dictionary(dictionary, key, word_instance, next_word)
+        dictionary[key].record_observance(word_instance)
+        dictionary[key].push(next_word)
       end
     end
   end
