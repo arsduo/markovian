@@ -1,9 +1,9 @@
-require 'markovian/corpus/dictionary_entry'
+require 'markovian/chain/dictionary_entry'
 #
 # This class represents a dictionary of words or phrases and the various words that can follow
 # them. The key is an opaque value, which could represent either a single word or a phrase as desired.
 module Markovian
-  class Corpus
+  class Chain
     class Dictionary
       def [](key)
         # Key could be a string or a Tokeneyes::Word object

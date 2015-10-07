@@ -1,5 +1,5 @@
 module Markovian
-  class Corpus
+  class Chain
     class DictionaryEntry
       attr_reader :word, :counts
       def initialize(word)
