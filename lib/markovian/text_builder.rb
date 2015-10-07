@@ -61,6 +61,5 @@ module Markovian
       # We get back Tokeneyes::Word objects, but for now only care about the strings within
       Utils::TextSplitter.new(seed_text).components
     end
-    end
   end
 end

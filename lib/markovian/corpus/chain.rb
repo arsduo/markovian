@@ -1,5 +1,4 @@
 require 'markovian/corpus/dictionary'
-require 'markovian/text_builder/end_of_sentence_filter'
 
 # The Chain represents Markov info as it's being assembled or expanded from a text. To compensate
 # for small sample sizes, we track multiple chains (derived from both two-word phrases and single
