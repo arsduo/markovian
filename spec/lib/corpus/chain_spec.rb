@@ -4,10 +4,16 @@ module Markovian
   class Corpus
     RSpec.describe Chain do
       let(:chain) { Chain.new }
-      let(:word) { Faker::Lorem.word }
-      let(:next_word) { Faker::Lorem.word }
-      let(:previous_word) { Faker::Lorem.word }
-      let(:phrase_association) { Faker::Lorem.word }
+      let(:word) { Tokeneyes::Word.new(Faker::Lorem.word) }
+      let(:next_word) { Tokeneyes::Word.new(Faker::Lorem.word) }
+      let(:previous_word) { Tokeneyes::Word.new(Faker::Lorem.word) }
+      let(:phrase_association) { Tokeneyes::Word.new(Faker::Lorem.word) }
+
+      describe "#word_entry" do
+        it "returns the dictionary entry for the word" do
+          expect(chain.word_entry(word)).to eq(DictionaryEntry.new(word))
+        end
+      end
 
       describe "#next_word" do
         it "returns no values when empty" do
@@ -21,11 +27,16 @@ module Markovian
             end
 
             it "returns the next word when looking up by word" do
-              expect(chain.next_word(word)).to eq(next_word)
+              expect(chain.next_word(word)).to eq(next_word.to_s)
             end
 
             it "returns the next word when looking up by phrase" do
-              expect(chain.next_word(word, previous_word: previous_word)).to eq(next_word)
+              expect(chain.next_word(word, previous_word: previous_word)).to eq(next_word.to_s)
+            end
+
+            it "populates the the entry's data" do
+              chain.next_word(word, previous_word: previous_word)
+              expect(chain.word_entry(word).occurrences).to eq(1)
             end
           end
 
@@ -47,11 +58,11 @@ module Markovian
                   next_word, phrase_association, phrase_association, next_word, next_word, next_word, phrase_association
                 ]
               end
-              expect(7.times.map { chain.next_word(word) }).to eq(results)
+              expect(7.times.map { chain.next_word(word) }).to eq(results.map(&:to_s))
             end
 
             it "returns only the next match when looking up by phrase" do
-              expect(7.times.map { chain.next_word(word, previous_word: previous_word) }).to eq([phrase_association] * 7)
+              expect(7.times.map { chain.next_word(word, previous_word: previous_word) }).to eq([phrase_association.to_s] * 7)
             end
           end
 
@@ -61,11 +72,11 @@ module Markovian
             end
 
             it "returns only the next phrase match when looking up by word" do
-              expect(7.times.map { chain.next_word(word) }).to eq([phrase_association] * 7)
+              expect(7.times.map { chain.next_word(word) }).to eq([phrase_association.to_s] * 7)
             end
 
             it "returns only the next match when looking up by phrase" do
-              expect(7.times.map { chain.next_word(word, previous_word: previous_word) }).to eq([phrase_association] * 7)
+              expect(7.times.map { chain.next_word(word, previous_word: previous_word) }).to eq([phrase_association.to_s] * 7)
             end
           end
         end
@@ -76,9 +87,9 @@ module Markovian
           chain.lengthen(word, next_word: next_word)
           chain.lengthen(next_word, next_word: word)
           if RUBY_PLATFORM == "java"
-            expect(3.times.map { chain.random_word }).to eq([word, word, next_word])
+            expect(3.times.map { chain.random_word }).to eq([word, word, next_word].map(&:to_s))
           else
-            expect(3.times.map { chain.random_word }).to eq([word, next_word, next_word])
+            expect(3.times.map { chain.random_word }).to eq([word, next_word, next_word].map(&:to_s))
           end
         end
       end
@@ -102,7 +113,7 @@ module Markovian
           expect(chain).to eq(other_chain)
         end
 
-        it "returns false if they're not the same " do
+        it "returns false if they're not the same" do
           chain.lengthen(word, next_word: next_word)
           chain.lengthen(next_word, next_word: word)
           other_chain.lengthen(word, next_word: next_word)

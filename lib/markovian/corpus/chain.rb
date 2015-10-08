@@ -11,9 +11,16 @@ module Markovian
         @two_key_dictionary = Dictionary.new
       end
 
+      # Allow access to a word's metadata by providing its dictionary entry. For now, we only do
+      # individual words, not two-word phrases.
+      def word_entry(word)
+        @one_key_dictionary[word]
+      end
+
       def lengthen(word, next_word:, previous_word: nil)
-        @one_key_dictionary[word].push(next_word)
-        @two_key_dictionary[two_word_key(previous_word, word)].push(next_word)
+        # When we encounter a word, we track its metadata and and what words surround it
+        write_to_dictionary(@one_key_dictionary, word, word, next_word)
+        write_to_dictionary(@two_key_dictionary, two_word_key(previous_word, word), word, next_word)
         word
       end
 
@@ -58,13 +65,18 @@ module Markovian
       def entry_if_present(entry)
         # Ignore empty entries that haven't actually been seen in the corpus
         # TODO refactor to not even create them
-        entry if entry.count > 0
+        entry if entry.occurrences > 0
       end
 
       # We represent the two words as a space-delimited phrase for simplicity and speed of access via
       # hash keys.
       def two_word_key(word1, word2)
         "#{word1} #{word2}"
+      end
+
+      def write_to_dictionary(dictionary, key, word_instance, next_word)
+        dictionary[key].record_observance(word_instance)
+        dictionary[key].push(next_word)
       end
     end
   end

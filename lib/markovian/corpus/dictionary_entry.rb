@@ -1,21 +1,29 @@
 module Markovian
   class Corpus
     class DictionaryEntry
-      attr_reader :word, :count
+      attr_reader :word, :counts
       def initialize(word)
-        @word = word
+        @word = word.to_s
         @next_words = []
         @previous_words = []
-        @count = 0
+        @counts = Hash.new(0)
       end
 
-      def push(word, direction: :forwards)
-        # The incoming word will be a Tokeneyes::Word object
-        array_for_direction(direction) << word.to_s
-        # we don't want to double-count words if we read the text both forward and backward, so
+      def record_observance(word_instance, direction: :forwards)
+        # The word has been observed, so let's increase the appropriate counts.
+        # We don't want to double-count words if we read the text both forward and backward, so
         # only count in the forward direction. (If we encounter a scenario where someone only wants
         # to read in the backward direction, we can deal with that then.)
-        @count += 1 if direction == :forwards
+        validate_direction(direction)
+        if direction == :forwards
+          @counts[:total] += 1
+          @counts[:ends_sentence] += 1 if word_instance.ends_sentence?
+        end
+      end
+
+      def push(next_word, direction: :forwards)
+        # Also add the follwoing word
+        array_for_direction(direction) << next_word.to_s
       end
 
       def next_word
@@ -32,9 +40,13 @@ module Markovian
           self.previous_words == other.previous_words
       end
 
+      def occurrences
+        counts[:total]
+      end
+
       protected
 
-      # for equality checking
+      # for equality checking and other usage
       attr_reader :next_words, :previous_words
 
       VALID_DIRECTIONS = [:backwards, :forwards]
