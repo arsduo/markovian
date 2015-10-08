@@ -87,7 +87,7 @@ module Markovian
           chain.lengthen(word, next_word: next_word)
           chain.lengthen(next_word, next_word: word)
           if RUBY_PLATFORM == "java"
-            expect(3.times.map { chain.random_word }).to eq([word, word, next_word].to_s)
+            expect(3.times.map { chain.random_word }).to eq([word, word, next_word].map(&:to_s))
           else
             expect(3.times.map { chain.random_word }).to eq([word, next_word, next_word].map(&:to_s))
           end
