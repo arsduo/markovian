@@ -6,6 +6,7 @@
 * Add Chain#word_entry to allow access to word data
 * Properly collect metadata about words (previously collected next_word's data)
 * Refactor Dictionary to provide access to entries, removing a lot of method duplication
+* Remove Corpus class (no longer necessary), make Chain the base
 
 ## 0.2.9
 

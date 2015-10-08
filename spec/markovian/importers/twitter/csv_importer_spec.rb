@@ -13,9 +13,9 @@ module Markovian
         ] }
         let(:importer) { CsvImporter.new(twitter_csv_path) }
 
-        describe "#corpus" do
-          it "creates a corpus with the texts from the CSV" do
-            expect(importer.corpus).to eq(Corpus::Compiler.new.build_corpus(texts_in_csv))
+        describe "#chain" do
+          it "creates a chain with the texts from the CSV" do
+            expect(importer.chain).to eq(Chain::Compiler.new.build_chain(texts_in_csv))
           end
         end
 

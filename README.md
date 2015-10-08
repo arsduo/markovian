@@ -19,11 +19,11 @@ Fuller documentation will come shortly. For now, let's see how we can use Markov
  => path_to_twitter_archive
 > importer = Markovian::Importers::Twitter::CsvImporter.new(path)
  => #<Markovian::Importers::Twitter::CsvImporter:0x007fd0ca3282a8 @path=path_to_twitter_archive>
-# now assemble the corpus of tweets -- this may take a few seconds to compile
-> corpus = importer.corpus
+# now assemble the chain based on the tweets -- this may take a few seconds to compile
+> chain = importer.chain
  => #<Markovian::Corpus:0x007fd0ca03df70 ...>
 # Now, we can build some text!
-> Markovian::TextBuilder.new(corpus).construct("markov")
+> Markovian::TextBuilder.new(chain).construct("markov")
 => "markov chains a lot better than a month, i've been here half an hour of night when you can get behind belgium for the offline train journey"
 ```
 
