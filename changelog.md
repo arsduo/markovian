@@ -2,6 +2,7 @@
 
 ## 0.3.0
 
+* TextBuilder now filters out final words that statistically rarely end sentences (first filter!)
 * TextBuilder#construct now includes seed text by default (instead of via opt-in)
 * Add Chain#word_entry to allow access to word data
 * Properly collect metadata about words (previously collected next_word's data)
