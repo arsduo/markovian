@@ -33,6 +33,10 @@ module Markovian
           end
           stream_of_words[current_index.to_i + 1]
         end
+
+        allow(chain).to receive(:word_entry) do |word|
+          Markovian::Chain::DictionaryEntry.new(word)
+        end
       end
 
       it "builds a text of the right length" do
@@ -54,6 +58,16 @@ module Markovian
 
       it "works fine if there's only one word in the seed text" do
         expect(builder.construct("going")).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+      end
+
+      it "applies the filter" do
+        result = ["result", "words"]
+        expect_any_instance_of(TextBuilder::EndOfSentenceFilter).to receive(:filtered_sentence) do |instance, words|
+          expect(words.map(&:class).uniq).to eq([Chain::DictionaryEntry])
+          expect(words.map(&:word).join(" ")).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+          result
+        end
+        expect(builder.construct("going")).to eq(result.join(" "))
       end
     end
   end
