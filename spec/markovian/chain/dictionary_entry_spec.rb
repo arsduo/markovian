@@ -138,6 +138,34 @@ module Markovian
           expect(entry).not_to eq(other_entry)
         end
       end
+
+      describe "#likelihood_to_end_sentence" do
+        it "returns nil if it has too few entries" do
+          word_object.ends_sentence = true
+          (DictionaryEntry::SIGNIFICANT_OCCURRENCE_THRESHOLD - 1).times do
+            entry.record_observance(word_object)
+          end
+          expect(entry.likelihood_to_end_sentence).to be_nil
+        end
+
+        it "returns % ending sentence if there's enough value" do
+          times_not_ending = (DictionaryEntry::SIGNIFICANT_OCCURRENCE_THRESHOLD * 0.4).to_i
+          times_not_ending.times do
+            entry.record_observance(word_object)
+          end
+          word_object.ends_sentence = true
+          (DictionaryEntry::SIGNIFICANT_OCCURRENCE_THRESHOLD - times_not_ending).times do
+            entry.record_observance(word_object)
+          end
+          expect(entry.likelihood_to_end_sentence).to eq(0.6)
+        end
+      end
+
+      describe "#to_s" do
+        it "returns the word" do
+          expect(entry.to_s).to eq(word)
+        end
+      end
     end
   end
 end

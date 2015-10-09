@@ -29,6 +29,15 @@ Fuller documentation will come shortly. For now, let's see how we can use Markov
 
 Exactly!
 
+## Features
+
+So far, Markovian gives you the ability to, given a set of inputs, generate random text. In
+addition, your money gets you:
+
+* A built-in importer to turn Twitter csv archives into Markov chain-derived text
+* A built-in filter  to remove final words that statistically (in the corpus) rarely end sentences.
+  Avoid unsightly sentences ending in "and so of" and so on!
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
