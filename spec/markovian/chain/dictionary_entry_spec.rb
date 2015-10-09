@@ -160,6 +160,12 @@ module Markovian
           expect(entry.likelihood_to_end_sentence).to eq(0.6)
         end
       end
+
+      describe "#to_s" do
+        it "returns the word" do
+          expect(entry.to_s).to eq(word)
+        end
+      end
     end
   end
 end

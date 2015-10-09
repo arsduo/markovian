@@ -54,6 +54,10 @@ module Markovian
         end
       end
 
+      def to_s
+        word
+      end
+
       protected
 
       # for equality checking and other usage
