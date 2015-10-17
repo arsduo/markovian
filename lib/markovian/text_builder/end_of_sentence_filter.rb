@@ -16,8 +16,11 @@ module Markovian
         return current_sentence if words_filtered >= MAX_WORDS_FILTERED
 
         last_word = current_sentence.last
-        likelihood = last_word.likelihood_to_end_sentence
-        if likelihood && rand < likelihood
+        if !last_word
+          # None of the words merit ending the sentence! The caller will deal with how to handle
+          # this situation.
+          []
+        elsif last_word.likelihood_to_end_sentence && rand < last_word.likelihood_to_end_sentence
           # if we pop a word, consider removing the next one
           filter_unlikely_ending_words(current_sentence[0..-2], words_filtered + 1)
         else
