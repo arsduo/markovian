@@ -39,18 +39,11 @@ module Markovian
           expect(filter.filtered_sentence(sentence)).to eq(sentence[0..3])
         end
 
-        it "will strip only up to three words" do
-          sentence.each do |word|
-            mark_how_ends_sentence(word, true)
-          end
-          expect(filter.filtered_sentence(sentence)).to eq(sentence[0..1])
-        end
-
         it "ends if all words are stripped" do
           sentence.each do |word|
             mark_how_ends_sentence(word, true)
           end
-          expect(filter.filtered_sentence(sentence[0..1])).to eq([])
+          expect(filter.filtered_sentence(sentence)).to eq([])
         end
 
         it "applies a probability based on the word's likelihood to end the sentence", temporary_srand: 37 do

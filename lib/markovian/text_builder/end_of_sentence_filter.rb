@@ -4,8 +4,6 @@ module Markovian
     # to a certain number of words if those words have a low likelihood of ending the sentence.
     # Future changes will increase the qualities filtered for.
     class EndOfSentenceFilter
-      MAX_WORDS_FILTERED = 3
-
       def filtered_sentence(sentence)
         filter_unlikely_ending_words(sentence)
       end
@@ -13,8 +11,6 @@ module Markovian
       protected
 
       def filter_unlikely_ending_words(current_sentence, words_filtered = 0)
-        return current_sentence if words_filtered >= MAX_WORDS_FILTERED
-
         last_word = current_sentence.last
         if !last_word
           # None of the words merit ending the sentence! The caller will deal with how to handle
