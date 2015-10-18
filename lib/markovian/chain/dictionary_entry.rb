@@ -2,7 +2,9 @@ module Markovian
   class Chain
     class DictionaryEntry
       # Below this, we don't have enough occurrences to draw conclusions about how a word is used.
-      SIGNIFICANT_OCCURRENCE_THRESHOLD = 50
+      # Longer-term, this could possibly be calculated in a more dynamic and effective way by
+      # analyzing the corpus itself.
+      SIGNIFICANT_OCCURRENCE_THRESHOLD = 500
 
       attr_reader :word, :counts
       def initialize(word)
