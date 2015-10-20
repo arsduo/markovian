@@ -17,10 +17,7 @@ module Markovian
     end
 
     def lengthen(word, next_word:, previous_word: nil)
-      # When we encounter a word, we track its metadata and and what words surround it
-      write_to_dictionary(@one_key_dictionary, word, word, next_word)
-      write_to_dictionary(@two_key_dictionary, two_word_key(previous_word, word), word, next_word)
-      word
+      push(tokeneyes(word), tokeneyes(next_word), tokeneyes(previous_word))
     end
 
     def next_word(word, previous_word: nil)
@@ -39,6 +36,12 @@ module Markovian
     end
 
     protected
+
+    def push(word, next_word, previous_word)
+      write_to_dictionary(@one_key_dictionary, word, word, next_word)
+      write_to_dictionary(@two_key_dictionary, two_word_key(previous_word, word), word, next_word)
+      word
+    end
 
     # for equality checking
     attr_reader :one_key_dictionary, :two_key_dictionary
@@ -76,6 +79,18 @@ module Markovian
     def write_to_dictionary(dictionary, key, word_instance, next_word)
       dictionary[key].record_observance(word_instance)
       dictionary[key].push(next_word)
+    end
+
+    # Allow strings to be passed in natively. There won't be metadata, but for small things this
+    # makes the gem much easier to use.
+    def tokeneyes(word)
+      return nil unless word
+
+      if word.is_a?(Tokeneyes::Word)
+        word
+      else
+        Tokeneyes::Word.new(word)
+      end
     end
   end
 end

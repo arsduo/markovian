@@ -15,17 +15,20 @@ module Markovian
         ]
       }
 
-      before :each do
+      before :each do |example|
         # freeze randomness
         # jruby on travis has some weirdness around the keyword arg, so we treat it as a hash in
         # the tests
+        skip_previous_word_validation = example.metadata[:skip_previous_word_validation]
         allow(chain).to receive(:next_word) do |current_word, params = {}|
           # simple mechanism to the next word
           previous_word = params[:previous_word]
           if current_index = stream_of_words.index(current_word.to_s)
             # since the stream is purely linear, we can also ensure that we're calling the words in
             # the right sequence
-            if current_index == 0
+            if skip_previous_word_validation
+              # do nothing
+            elsif current_index == 0
               expect(previous_word).to be_nil
             else
               expect(previous_word.to_s).to eq(stream_of_words[current_index - 1])
@@ -54,6 +57,11 @@ module Markovian
       it "ignores leading spaces" do
         stream_of_words[3] = " foo "
         expect(builder.construct(seed_text)).to eq("going on voluptate foo rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+      end
+
+      it "works fine with if the same instance is called more than once", :skip_previous_word_validation do
+        builder.construct("going")
+        expect(builder.construct("on")).to eq("on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
       end
 
       it "works fine if there's only one word in the seed text" do

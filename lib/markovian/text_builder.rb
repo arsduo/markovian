@@ -63,7 +63,7 @@ module Markovian
     end
 
     def sentence_with_word_data(sentence)
-      @sentence_with_word_data ||= sentence.map {|word| chain.word_entry(word)}
+      sentence.map {|word| chain.word_entry(word)}
     end
 
     def split_seed_text(seed_text)
