@@ -2,6 +2,7 @@
 
 ## 0.4.0
 
+* Extract SentenceBuilder from TextBuilder for future use
 * Chain#lengthen can now take strings as well as Tokeneyes::Words
 * Fix bug preventing reuse of TextBuilder objects
 * EndOfSentenceFilter can now handle sentences where no word meets the criteria
