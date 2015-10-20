@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.0
+
+* Chain#lengthen can now take strings as well as Tokeneyes::Words
+* Remove the Importer namespace (it's now in markovian-tools)
+
 ## 0.3.0
 
 * TextBuilder now filters out final words that statistically rarely end sentences (first filter!)
