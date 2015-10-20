@@ -7,43 +7,35 @@ module Markovian
     let(:builder) { TextBuilder.new(chain) }
 
     describe "#construct", temporary_srand: 17 do
-      let(:stream_of_words) {
-        [
-          "going", "on", "voluptate", "debitis", "rerum", "recusandae", "accusantium", "quo",
-          "consequatur", "quam", "hic", "atque", "earum", "repellendus", "quasi", "est", "aut",
-          "omnis", "eum", "numquam", "distinctio"
-        ]
-      }
+      let(:results) { Faker::Lorem.words(5) }
+      let(:length) { 30 }
+      let(:exclude_seed_text) { false }
 
-      before :each do |example|
-        # freeze randomness
-        # jruby on travis has some weirdness around the keyword arg, so we treat it as a hash in
-        # the tests
-        skip_previous_word_validation = example.metadata[:skip_previous_word_validation]
-        allow(chain).to receive(:next_word) do |current_word, params = {}|
-          # simple mechanism to the next word
-          previous_word = params[:previous_word]
-          if current_index = stream_of_words.index(current_word.to_s)
-            # since the stream is purely linear, we can also ensure that we're calling the words in
-            # the right sequence
-            if skip_previous_word_validation
-              # do nothing
-            elsif current_index == 0
-              expect(previous_word).to be_nil
-            else
-              expect(previous_word.to_s).to eq(stream_of_words[current_index - 1])
-            end
-          end
-          stream_of_words[current_index.to_i + 1]
+      before :each do
+        allow(chain).to receive(:word_entry) do |word|
+          Chain::DictionaryEntry.new(word)
         end
 
-        allow(chain).to receive(:word_entry) do |word|
-          Markovian::Chain::DictionaryEntry.new(word)
+        allow_any_instance_of(TextBuilder::SentenceBuilder).to receive(:construct_sentence) do |instance, exclude_seed_text|
+          expect(exclude_seed_text).to eq(exclude_seed_text)
+          expect(instance.chain).to eq(chain)
+          expect(instance.seed_text).to eq(seed_text)
+          expect(instance.max_length).to eq(length)
+          results
         end
       end
 
-      it "builds a text of the right length" do
-        expect(builder.construct(seed_text)).to eq("going on voluptate debitis rerum recusandae accusantium quo consequatur quam hic atque earum repellendus quasi est aut omnis eum numquam")
+      it "returns the results of the SentenceBuilder call joined together" do
+        expect(builder.construct(seed_text)).to eq(results.join(" "))
+      end
+
+      context "with a different length" do
+        let(:length) { 30 }
+
+        it "passes the other length through" do
+          # verify that the assertion in the before filter still passes
+          expect(builder.construct(seed_text, length: length)).to eq(results.join(" "))
+        end
       end
 
       it "accepts a shorter length" do

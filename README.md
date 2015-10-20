@@ -15,27 +15,31 @@ Clone from Github, and then execute:
 Fuller documentation will come shortly. For now, let's see how we can use Markovian to build some tweets from a Twitter archive we've downloaded:
 
 ```ruby
-> path = #{path_to_twitter_archive}
- => path_to_twitter_archive
-> importer = Markovian::Importers::Twitter::CsvImporter.new(path)
- => #<Markovian::Importers::Twitter::CsvImporter:0x007fd0ca3282a8 @path=path_to_twitter_archive>
-# now assemble the chain based on the tweets -- this may take a few seconds to compile
-> chain = importer.chain
- => #<Markovian::Corpus:0x007fd0ca03df70 ...>
+> chain = Markovian::Chain.new
+> chain.lengthen("there", next_word: "friend")
+> chain.lengthen("there", next_word: "are")
+> chain.lengthen("are", next_word: "four", previous_word: "four")
+> chain.lengthen("four", next_word: "lights", previous_word: "four")
+> chain.lengthen("are", next_word: "we")
+> chain.lengthen("friend", next_word: "cat")
+> chain.lengthen("cat", next_word: "rocks", previous_word: "friend")
 # Now, we can build some text!
-> Markovian::TextBuilder.new(chain).construct("markov")
-=> "markov chains a lot better than a month, i've been here half an hour of night when you can get behind belgium for the offline train journey"
+> Markovian::TextBuilder.new(chain).construct("there")
+=> "there friend cat rocks"
 ```
 
 Exactly!
+
+Markovian is most easily used with the [markovian-tools
+gem](https://github.com/arsduo/markovian-tools), which provides utilities for importing
+Twitter and Facebook archives and for posting tweets, among other things.
 
 ## Features
 
 So far, Markovian gives you the ability to, given a set of inputs, generate random text. In
 addition, your money gets you:
 
-* A built-in importer to turn Twitter csv archives into Markov chain-derived text
-* A built-in filter  to remove final words that statistically (in the corpus) rarely end sentences.
+* A built-in filter to remove final words that statistically (in the corpus) rarely end sentences.
   Avoid unsightly sentences ending in "and so of" and so on!
 
 ## Development
