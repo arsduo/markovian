@@ -4,6 +4,12 @@
 
 * Chain#lengthen can now take strings as well as Tokeneyes::Words
 * Remove the Importer namespace (it's now in markovian-tools)
+* Fix bug preventing reuse of TextBuilder objects
+* EndOfSentenceFilter can now handle sentences where no word meets the criteria
+* EndOfSentenceFilter now strips as many words as shouldn't be there
+* Bumped up the significant occurence threshold for filtering to 500 occurrences
+* Handle edge cases of words that always end sentences
+* Extract Markovian::SentenceBuilder for future use
 
 ## 0.3.0
 
