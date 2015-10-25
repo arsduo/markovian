@@ -40,7 +40,8 @@ module Markovian
       end
 
       def ==(other)
-        self.word == other.word &&
+        other &&
+          self.word == other.word &&
           self.next_words == other.next_words &&
           self.previous_words == other.previous_words
       end

@@ -46,9 +46,9 @@ module Markovian
           result = 10.times.map { filter.filtered_sentence(sentence)[4] }
           last_word = sentence.last
           if RUBY_PLATFORM == "java"
-            expect(result).to eq([last_word, nil, last_word, nil, last_word, last_word, last_word, nil, last_word, last_word])
+            expect(result).to eq([nil, last_word, nil, last_word, nil, nil, nil, last_word, nil, nil])
           else
-            expect(result).to eq([nil, last_word, last_word, nil, last_word, nil, last_word, last_word, last_word, nil])
+            expect(result).to eq([last_word, nil, nil, last_word, nil, last_word, nil, nil, nil, last_word])
           end
         end
       end

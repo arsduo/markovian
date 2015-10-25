@@ -137,6 +137,10 @@ module Markovian
           other_entry.push(Tokeneyes::Word.new(other_word.to_s + "foo"), direction: :backwards)
           expect(entry).not_to eq(other_entry)
         end
+
+        it "is not equal to nil" do
+          expect(entry).not_to eq(nil)
+        end
       end
 
       describe "#likelihood_to_end_sentence" do
