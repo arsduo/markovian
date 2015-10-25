@@ -34,7 +34,7 @@ module Markovian
         # c2) randomly fail a check based on how frequently they end stuff
         likelihood &&
           likelihood != 1 &&
-          (likelihood == 0 || rand < word.likelihood_to_end_sentence)
+          (likelihood == 0 || rand > word.likelihood_to_end_sentence)
 
       end
     end
