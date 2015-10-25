@@ -114,7 +114,7 @@ module Markovian
         it "is not equal if the base word is different" do
           entry.push(next_word)
           entry.push(other_word, direction: :backwards)
-          other_entry = DictionaryEntry.new(Faker::Lorem.word)
+          other_entry = DictionaryEntry.new(word + "Hello")
           other_entry.push(next_word)
           other_entry.push(other_word, direction: :backwards)
           expect(entry).not_to eq(other_entry)
@@ -124,7 +124,7 @@ module Markovian
           entry.push(next_word)
           entry.push(other_word, direction: :backwards)
           other_entry = DictionaryEntry.new(word)
-          other_entry.push(Tokeneyes::Word.new(Faker::Lorem.word))
+          other_entry.push(Tokeneyes::Word.new(word + "Hello"))
           other_entry.push(other_word, direction: :backwards)
           expect(entry).not_to eq(other_entry)
         end
