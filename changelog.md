@@ -5,8 +5,7 @@
 * Extract SentenceBuilder from TextBuilder for future use
 * Chain#lengthen can now take strings as well as Tokeneyes::Words
 * Fix bug preventing reuse of TextBuilder objects
-* EndOfSentenceFilter can now handle sentences where no word meets the criteria
-* EndOfSentenceFilter now strips as many words as shouldn't be there
+* Update EndOfSentenceFilter (works when no words match, has no limit, uses proper probabilities)
 * Bumped up the significant occurrence threshold for filtering to 500 occurrences
 * Handle edge cases of words that always end sentences
 
