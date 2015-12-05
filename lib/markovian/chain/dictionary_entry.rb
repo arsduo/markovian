@@ -10,40 +10,28 @@ module Markovian
       def initialize(word)
         @word = word.to_s
         @next_words = []
-        @previous_words = []
         @counts = Hash.new(0)
       end
 
-      def record_observance(word_instance, direction: :forwards)
+      def record_observance(word_instance)
         # The word has been observed, so let's increase the appropriate counts.
-        # We don't want to double-count words if we read the text both forward and backward, so
-        # only count in the forward direction. (If we encounter a scenario where someone only wants
-        # to read in the backward direction, we can deal with that then.)
-        validate_direction(direction)
-        if direction == :forwards
-          @counts[:total] += 1
-          @counts[:ends_sentence] += 1 if word_instance.ends_sentence?
-        end
+        @counts[:total] += 1
+        @counts[:ends_sentence] += 1 if word_instance.ends_sentence?
       end
 
-      def push(next_word, direction: :forwards)
+      def push(next_word)
         # Also add the follwoing word
-        array_for_direction(direction) << next_word.to_s
+        @next_words << next_word.to_s
       end
 
       def next_word
         next_words.sample
       end
 
-      def previous_word
-        previous_words.sample
-      end
-
       def ==(other)
         other &&
           self.word == other.word &&
-          self.next_words == other.next_words &&
-          self.previous_words == other.previous_words
+          self.next_words == other.next_words
       end
 
       def occurrences
@@ -64,20 +52,7 @@ module Markovian
       protected
 
       # for equality checking and other usage
-      attr_reader :next_words, :previous_words
-
-      VALID_DIRECTIONS = [:backwards, :forwards]
-
-      def array_for_direction(direction)
-        validate_direction(direction)
-        direction == :backwards ? previous_words : next_words
-      end
-
-      def validate_direction(direction)
-        unless VALID_DIRECTIONS.include?(direction)
-          raise ArgumentError.new("Invalid direction #{direction.inspect}, valid directions are #{VALID_DIRECTIONS.inspect}")
-        end
-      end
+      attr_reader :next_words
     end
   end
 end
